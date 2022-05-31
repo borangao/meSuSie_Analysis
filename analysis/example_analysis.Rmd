@@ -1,0 +1,19 @@
+---
+title: "example_analysis"
+author: "borangao"
+date: "2022-05-30"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+library(meSuSie)
+test_run<-meSuSie_core(R_mat_list,summary_stat_list,L=10,residual_variance=NULL,prior_weights=NULL,optim_method ="optim",estimate_residual_variance =F,max_iter =100)
+library(ggplot2)
+meSusie_plot_pip(test_run,R_mat_list,summary_stat_list)
+
+```
+
