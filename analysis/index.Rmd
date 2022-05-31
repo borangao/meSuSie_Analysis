@@ -1,11 +1,31 @@
 ---
-title: "Home"
+title: "Introduction to meSuSie"
+author: "Boran Gao"
+date: "2022-05-30"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+# Introduction to meSuSie
+meSuSie is a multiple ancestry extension of Sum of Single Effect model for GWAS fine-mapping. meSuSie assumes that the causal SNPs are shared across ancestries, thought differ in effect size due to allele heterogeneity, and hence the power of analysis increases by jointly modelling the effect across ancestries. By leveraging the independent effect assumption of SuSie, meSuSie models the correlation structure of the effect sizes of causal SNPs across ancestries, and therefore further improve the power of causal SNP detection.
+
+## meSuSie Example
+![](Fig_1.jpeg)
+
+## meSuSie Model Overview
+meSuSie builds upon the sum of single effect model, and extend the normal assumption on the effec size of causal SNP to multivariate normal, and thus capture the correlation across ancestries.
+fashion:
+$$
+  \left(\begin{matrix}{y}_\mathbf{1}\\{y}_\mathbf{2}\\\end{matrix}\right)=\left[\begin{matrix}{X}_\mathbf{1}&0\\0&{X}_\mathbf{2}\\\end{matrix}\right]\ast\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right)+\left(\begin{matrix}{\epsilon}_\mathbf{1}\\{\epsilon}_\mathbf{2}\\\end{matrix}\right), 
+$$
+In the above equation, $y_1,y_2$ are standardized phenotype for each ancestry, $X_1,X_2$ are centered genotype matrices, $b_1,b_2$ are sum of the single effect models which are in the form, 
+$$
+\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right) = \sum_l \gamma_l\bigotimes \left(z_l\cdot\left(\begin{matrix}{\beta}_\mathbf{1l}\\{\beta}_\mathbf{2l}\\\end{matrix}\right) \right)
+$$
+which represents the summation of the single effects.
+
+
