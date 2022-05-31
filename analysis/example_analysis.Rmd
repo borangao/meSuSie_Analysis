@@ -1,19 +1,35 @@
 ---
-title: "example_analysis"
+title: "meSuSie Example"
 author: "borangao"
 date: "2022-05-30"
-output: workflowr::wflow_html
+output:
+  workflowr::wflow_html:
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
-
-```{r}
-library(meSuSie)
-test_run<-meSuSie_core(R_mat_list,summary_stat_list,L=10,residual_variance=NULL,prior_weights=NULL,optim_method ="optim",estimate_residual_variance =F,max_iter =100)
-library(ggplot2)
-meSusie_plot_pip(test_run,R_mat_list,summary_stat_list)
-
+# Package Installation
+Install meSuSie package maintained in [github](https://github.com/borangao/meSuSie) through the "devtools" package.
+```{r eval = FALSE}
+if(!require(devtools))
+  install.packages(devtools)
+devtools::install_github("borangao/meSuSie")
 ```
 
+# Input Data
+meSuSie requires correlation matrix  and summary statistics. Correlation matrices are stored in a list, with element of the list being the correlation matrix from each ancestry. The column name of the matrix is the name of the SNP, and the order of the SNP should be consistent with the order in summary statistics. Summary statistics are stored in a list with length of the number ancestry. Each element of the list is the summary statistics for the ancestry. The minimum requirement of the summary statistics require the information of SNP, Beta, Se, Z and N. The column names should be exactly match for meSuSie to run.
+
+# Data Loading and Run meSuSie Analysis
+```{r}
+library(meSuSie)
+data("R_mat_list") 
+data("summary_stat_list")
+test_meSuSie<-meSuSie_core(R_mat_list,summary_stat_list,L=10,residual_variance=NULL,prior_weights=NULL,optim_method ="optim",estimate_residual_variance =F,max_iter =100)
+```
+
+# Visualization: Manhattan and PIP Plot
+```{r}
+library(ggplot2)
+meSusie_plot_pip(test_meSuSie,R_mat_list,summary_stat_list)
+```
