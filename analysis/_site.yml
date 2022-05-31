@@ -1,14 +1,16 @@
-name: "meSuSie_Analysis"
+name: meSuSie_Analysis
 output_dir: ../docs
 navbar:
-  title: "meSuSie_Analysis"
+  title: meSuSie
   left:
-  - text: Home
+  - text: Introduction
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  - text: Example Analysis
+    href: example_analysis.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/borangao/meSuSie_Analysis
 output:
   workflowr::wflow_html:
     toc: yes
