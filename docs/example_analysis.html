@@ -13,7 +13,7 @@
 
 <meta name="date" content="2022-05-30" />
 
-<title>example_analysis</title>
+<title>meSuSie Example</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -359,7 +359,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">example_analysis</h1>
+<h1 class="title toc-ignore">meSuSie Example</h1>
 <h4 class="author">borangao</h4>
 <h4 class="date">2022-05-30</h4>
 
@@ -521,15 +521,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreea117569b67b81879ed6ffb292ef4b1dfeb698f67targetblanka117569a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreedd94ff3674d06042966c83cf9cc9d1b4ff65515dtargetblankdd94ff3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/a117569b67b81879ed6ffb292ef4b1dfeb698f67" target="_blank">a117569</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/dd94ff3674d06042966c83cf9cc9d1b4ff65515d" target="_blank">dd94ff3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreea117569b67b81879ed6ffb292ef4b1dfeb698f67targetblanka117569a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreedd94ff3674d06042966c83cf9cc9d1b4ff65515dtargetblankdd94ff3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +539,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/a117569b67b81879ed6ffb292ef4b1dfeb698f67" target="_blank">a117569</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/dd94ff3674d06042966c83cf9cc9d1b4ff65515d" target="_blank">dd94ff3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -603,6 +603,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/dd94ff3674d06042966c83cf9cc9d1b4ff65515d/analysis/example_analysis.Rmd" target="_blank">dd94ff3</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-05-30
+</td>
+<td>
+Add my first analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/8a1d176b24c7ec7cb790a747947962d008e52407/docs/example_analysis.html" target="_blank">8a1d176</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-05-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/borangao/meSuSie_Analysis/blob/a117569b67b81879ed6ffb292ef4b1dfeb698f67/analysis/example_analysis.Rmd" target="_blank">a117569</a>
 </td>
 <td>
@@ -622,10 +656,33 @@ Add my first analysis
 </div>
 </div>
 </div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
+<div id="package-installation" class="section level1">
+<h1>Package Installation</h1>
+<p>Install meSuSie package maintained in <a
+href="https://github.com/borangao/meSuSie">github</a> through the
+“devtools” package.</p>
+<pre class="r"><code>if(!require(devtools))
+  install.packages(devtools)
+devtools::install_github(&quot;borangao/meSuSie&quot;)</code></pre>
+</div>
+<div id="input-data" class="section level1">
+<h1>Input Data</h1>
+<p>meSuSie requires correlation matrix and summary statistics.
+Correlation matrices are stored in a list, with element of the list
+being the correlation matrix from each ancestry. The column name of the
+matrix is the name of the SNP, and the order of the SNP should be
+consistent with the order in summary statistics. Summary statistics are
+stored in a list with length of the number ancestry. Each element of the
+list is the summary statistics for the ancestry. The minimum requirement
+of the summary statistics require the information of SNP, Beta, Se, Z
+and N. The column names should be exactly match for meSuSie to run.</p>
+</div>
+<div id="data-loading-and-run-mesusie-analysis" class="section level1">
+<h1>Data Loading and Run meSuSie Analysis</h1>
 <pre class="r"><code>library(meSuSie)
-test_run&lt;-meSuSie_core(R_mat_list,summary_stat_list,L=10,residual_variance=NULL,prior_weights=NULL,optim_method =&quot;optim&quot;,estimate_residual_variance =F,max_iter =100)</code></pre>
+data(&quot;R_mat_list&quot;) 
+data(&quot;summary_stat_list&quot;)
+test_meSuSie&lt;-meSuSie_core(R_mat_list,summary_stat_list,L=10,residual_variance=NULL,prior_weights=NULL,optim_method =&quot;optim&quot;,estimate_residual_variance =F,max_iter =100)</code></pre>
 <pre><code>*************************************************************
 
   Multiple Ancestry Sum of Single Effect Model (meSuSie)          
@@ -670,10 +727,13 @@ $requested_coverage
 
 
  Use meSusie_plot_pip() for Mahattan and PIP Plot
-# Total time used for the analysis: 0.08 mins</code></pre>
+# Total time used for the analysis: 0.13 mins</code></pre>
+</div>
+<div id="visualization-manhattan-and-pip-plot" class="section level1">
+<h1>Visualization: Manhattan and PIP Plot</h1>
 <pre class="r"><code>library(ggplot2)
-meSusie_plot_pip(test_run,R_mat_list,summary_stat_list)</code></pre>
-<p><img src="figure/example_analysis.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+meSusie_plot_pip(test_meSuSie,R_mat_list,summary_stat_list)</code></pre>
+<p><img src="figure/example_analysis.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
