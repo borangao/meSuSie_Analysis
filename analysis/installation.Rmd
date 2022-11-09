@@ -1,0 +1,150 @@
+---
+title: "Installation"
+author: "borangao"
+date: "2022-11-09"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Installation of MESuSiE
+
+```{r,message=FALSE,warning=FALSE}
+library(devtools)
+# Install MESuSiE
+install_github("borangao/MESuSiE")
+# Load MESuSiE
+library(MESuSiE)
+library(progress)
+```
+
+## Illustration example
+We will give the illustration example with the toy example data in the manuscript. For this toy example, we focused on six SNPs that belong to three distinct LD clusters in the region, with SNP 1/2, 3/4 and 5/6 in each cluster respectively, and with high SNP correlations within each cluster and weak SNP correlations between clusters. We set SNP 4 as the shared causal SNP and set SNPs 2 and 6 as the BB and WB-specific causal SNPs, respectively. 
+
+### Data generation
+```{r,message=FALSE,warning=FALSE}
+library(data.table)
+library(snpStats)
+geno_dir<-paste0("/net/fantasia/home/borang/Genotype/Fig1/")
+
+WB_plink<-read.plink(paste0(geno_dir,"WB.bed"))
+BB_plink<-read.plink(paste0(geno_dir,"BB.bed"))
+WB_plink_geno<-as(WB_plink$genotypes,"numeric")
+WB_plink_geno<-apply(WB_plink_geno,2,function(x){
+  x[is.na(x)]=mean(x,na.rm=T)
+  x = scale(x)
+  return(x)
+})
+BB_plink_geno<-as(BB_plink$genotypes,"numeric")
+BB_plink_geno<-apply(BB_plink_geno,2,function(x){
+  x[is.na(x)]=mean(x,na.rm=T)
+  x = scale(x)
+  return(x)
+})
+
+BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]<-1*BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]
+
+WB_plink_geno<-WB_plink_geno[,c(3,4,1,2,5,6)]
+BB_plink_geno<-BB_plink_geno[,c(3,4,1,2,5,6)]
+WB_cov<-cov2cor(crossprod(WB_plink_geno))
+BB_cov<-cov2cor(crossprod(BB_plink_geno))
+
+
+colnames(WB_cov)<-paste0("SNP",seq(1,6,1))
+colnames(BB_cov)<-paste0("SNP",seq(1,6,1))
+
+colnames(WB_plink_geno)<-paste0("SNP",seq(1,6,1))
+colnames(BB_plink_geno)<-paste0("SNP",seq(1,6,1))
+
+
+causal_snp_list_1<-c("SNP2","SNP4")
+causal_snp_list_2<-c("SNP4","SNP6")
+
+
+num_causal_SNP=2
+library(mvtnorm)
+WB_plink_causal<-matrix(WB_plink_geno[colnames(WB_plink_geno)%in%causal_snp_list_1],ncol=num_causal_SNP)
+BB_plink_causal<-matrix(BB_plink_geno[colnames(BB_plink_geno)%in%causal_snp_list_2],ncol=num_causal_SNP)
+
+beta_BB<-c(0.02,0.02)
+beta_BB_all<-rep(0,ncol(BB_cov))
+beta_BB_all[which(colnames(BB_cov)%in%causal_snp_list_1)]<-beta_BB
+beta_BB_marginal<-BB_cov%*%beta_BB_all
+
+
+beta_WB<-c(0.02,0.02)
+beta_WB_all<-rep(0,ncol(WB_cov))
+beta_WB_all[which(colnames(WB_cov)%in%causal_snp_list_2)]<-beta_WB
+beta_WB_marginal<-WB_cov%*%beta_WB_all
+
+set.seed(881130)
+y_null_WB<-rnorm(nrow(WB_plink_geno),0,sqrt(1-var(WB_cov%*%beta_WB_all)))
+y_null_WB<-y_null_WB-mean(y_null_WB)
+y_null_BB<-rnorm(nrow(BB_plink_geno),0,sqrt(1-var(BB_cov%*%beta_BB_all)))
+y_null_BB<-y_null_BB-mean(y_null_BB)
+err_beta_WB<-t(WB_plink_geno)%*%y_null_WB/nrow(WB_plink_geno)
+err_beta_BB<-t(BB_plink_geno)%*%y_null_BB/nrow(BB_plink_geno)
+
+target_WB_N<-300000
+target_BB_N<-300000
+
+
+err_beta_WB_scale<-sqrt(nrow(WB_plink_geno)/target_WB_N)*err_beta_WB
+err_beta_BB_scale<-sqrt(nrow(BB_plink_geno)/target_BB_N)*err_beta_BB
+
+z_WB<-(beta_WB_marginal+err_beta_WB_scale)*sqrt(target_WB_N)
+z_BB<-(beta_BB_marginal+err_beta_BB_scale)*sqrt(target_BB_N)
+
+
+R_mat_list=list("WB" = WB_cov,"BB" = BB_cov)
+
+summary_stat_1 = data.frame("SNP" = colnames(WB_cov), "Beta"=beta_WB_marginal+err_beta_WB_scale,"Se"=1/sqrt(target_WB_N), "Z" =z_WB,  "N" =target_WB_N )
+summary_stat_2 = data.frame("SNP" = colnames(WB_cov), "Beta"=beta_BB_marginal+err_beta_BB_scale,"Se"=1/sqrt(target_BB_N), "Z" =z_BB,  "N" =target_BB_N )
+summary_stat_sd_list = list("WB" = summary_stat_1,"BB"=summary_stat_2 )  
+save(R_mat_list,summary_stat_sd_list,file="/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData")
+
+```
+
+### Input of MESuSiE
+For the input of the MESuSiE, we require a list of summary statistics and a list of LD matrices from multiple ancestries.
+```{r,message=FALSE,warning=FALSE}
+load("/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData")
+summary_stat_sd_list
+```
+Each element of the summary statistics list is a data frame of summary statistics from each ancestry with column name SNP, Beta, Se, Z, and N representing SNP information, marginal effect size, standard error, Z-scores and number of sample.
+```{r,message=FALSE,warning=FALSE}
+R_mat_list
+```
+Each element of the LD matrices list is a matrix of LD from each ancestry, with column name being SNP name matched up with the summary statistics. 
+
+### Run MESuSiE
+```{r,message=FALSE,warning=FALSE}
+MESuSiE_test<-meSuSie_core(R_mat_list,summary_stat_sd_list,L=10)
+colnames(MESuSiE_test$pip_config)<-c("PIP_WB","PIP_BB","PIP_Shared")
+rownames(MESuSiE_test$pip_config)<-paste0("SNP",seq(1,6))
+MESuSiE_test$pip_config
+```
+We can see that there are 3 SNPs that reaching posterior inclusion probability (PIP) cutoff 0.5. We further check the PIP of SNP being ancestry-specific and shared, and found that SNP4 being shared, SNP2 and SNP6 being ancestry-specific
+
+### Run SuSiE
+```{r,message=FALSE,warning=FALSE}
+library(susieR)
+susie_WB<-susie_rss(summary_stat_sd_list$WB$Z,R_mat_list$WB)
+susie_BB<-susie_rss(summary_stat_sd_list$BB$Z,R_mat_list$BB)
+susie_WB$pip
+susie_BB$pip
+```
+We further run the univariate SuSiE, and found that SNP 3 and 6 being European-specific signals, SNP 2 and 4 being African-specific signal with a PIP cutoff 0.5
+
+### Run Paintor
+```{r,message=FALSE,warning=FALSE}
+##We load the Paintor result directly
+paintor_post<-read.table(paste0("/net/fantasia/home/borang/Genotype/Fig1/result/fig1.mcmc.paintor"),header=T)
+paintor_post
+```
+
+Paintor identifies SNP2-5 as signals without distinguishing ancestry-specific or shared causal variant.
+
+
+### Summarization Plot
+![](Fig_1.jpeg)

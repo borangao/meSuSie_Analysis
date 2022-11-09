@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="borangao" />
+
+<meta name="date" content="2022-11-09" />
+
+<title>Installation</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">MESuSiE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="installation.html">Installation</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Example Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="HDL_APOE.html">Shared Causal Variant</a>
+    </li>
+    <li>
+      <a href="TC_ARIC4.html">Ancestry-specific Causal Variant</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/borangao/meSuSie_Analysis">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Installation</h1>
+<h4 class="author">borangao</h4>
+<h4 class="date">2022-11-09</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-09
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>meSuSie_Analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220530code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220530)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220530code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220530)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/HDL_APOE.Rmd
+    Untracked:  analysis/TC_ARIC4.Rmd
+    Untracked:  analysis/illustration.Rmd
+    Untracked:  analysis/installation.Rmd
+    Untracked:  analysis/toy_example.Rmd
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="installation-of-mesusie" class="section level2">
+<h2>Installation of MESuSiE</h2>
+<pre class="r"><code>library(devtools)
+# Install MESuSiE
+install_github(&quot;borangao/MESuSiE&quot;)
+# Load MESuSiE
+library(MESuSiE)
+library(progress)</code></pre>
+</div>
+<div id="illustration-example" class="section level2">
+<h2>Illustration example</h2>
+<p>We will give the illustration example with the toy example data in
+the manuscript. For this toy example, we focused on six SNPs that belong
+to three distinct LD clusters in the region, with SNP 1/2, 3/4 and 5/6
+in each cluster respectively, and with high SNP correlations within each
+cluster and weak SNP correlations between clusters. We set SNP 4 as the
+shared causal SNP and set SNPs 2 and 6 as the BB and WB-specific causal
+SNPs, respectively.</p>
+<div id="data-generation" class="section level3">
+<h3>Data generation</h3>
+<pre class="r"><code>library(data.table)
+library(snpStats)
+geno_dir&lt;-paste0(&quot;/net/fantasia/home/borang/Genotype/Fig1/&quot;)
+
+WB_plink&lt;-read.plink(paste0(geno_dir,&quot;WB.bed&quot;))
+BB_plink&lt;-read.plink(paste0(geno_dir,&quot;BB.bed&quot;))
+WB_plink_geno&lt;-as(WB_plink$genotypes,&quot;numeric&quot;)
+WB_plink_geno&lt;-apply(WB_plink_geno,2,function(x){
+  x[is.na(x)]=mean(x,na.rm=T)
+  x = scale(x)
+  return(x)
+})
+BB_plink_geno&lt;-as(BB_plink$genotypes,&quot;numeric&quot;)
+BB_plink_geno&lt;-apply(BB_plink_geno,2,function(x){
+  x[is.na(x)]=mean(x,na.rm=T)
+  x = scale(x)
+  return(x)
+})
+
+BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]&lt;-1*BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]
+
+WB_plink_geno&lt;-WB_plink_geno[,c(3,4,1,2,5,6)]
+BB_plink_geno&lt;-BB_plink_geno[,c(3,4,1,2,5,6)]
+WB_cov&lt;-cov2cor(crossprod(WB_plink_geno))
+BB_cov&lt;-cov2cor(crossprod(BB_plink_geno))
+
+
+colnames(WB_cov)&lt;-paste0(&quot;SNP&quot;,seq(1,6,1))
+colnames(BB_cov)&lt;-paste0(&quot;SNP&quot;,seq(1,6,1))
+
+colnames(WB_plink_geno)&lt;-paste0(&quot;SNP&quot;,seq(1,6,1))
+colnames(BB_plink_geno)&lt;-paste0(&quot;SNP&quot;,seq(1,6,1))
+
+
+causal_snp_list_1&lt;-c(&quot;SNP2&quot;,&quot;SNP4&quot;)
+causal_snp_list_2&lt;-c(&quot;SNP4&quot;,&quot;SNP6&quot;)
+
+
+num_causal_SNP=2
+library(mvtnorm)
+WB_plink_causal&lt;-matrix(WB_plink_geno[colnames(WB_plink_geno)%in%causal_snp_list_1],ncol=num_causal_SNP)
+BB_plink_causal&lt;-matrix(BB_plink_geno[colnames(BB_plink_geno)%in%causal_snp_list_2],ncol=num_causal_SNP)
+
+beta_BB&lt;-c(0.02,0.02)
+beta_BB_all&lt;-rep(0,ncol(BB_cov))
+beta_BB_all[which(colnames(BB_cov)%in%causal_snp_list_1)]&lt;-beta_BB
+beta_BB_marginal&lt;-BB_cov%*%beta_BB_all
+
+
+beta_WB&lt;-c(0.02,0.02)
+beta_WB_all&lt;-rep(0,ncol(WB_cov))
+beta_WB_all[which(colnames(WB_cov)%in%causal_snp_list_2)]&lt;-beta_WB
+beta_WB_marginal&lt;-WB_cov%*%beta_WB_all
+
+set.seed(881130)
+y_null_WB&lt;-rnorm(nrow(WB_plink_geno),0,sqrt(1-var(WB_cov%*%beta_WB_all)))
+y_null_WB&lt;-y_null_WB-mean(y_null_WB)
+y_null_BB&lt;-rnorm(nrow(BB_plink_geno),0,sqrt(1-var(BB_cov%*%beta_BB_all)))
+y_null_BB&lt;-y_null_BB-mean(y_null_BB)
+err_beta_WB&lt;-t(WB_plink_geno)%*%y_null_WB/nrow(WB_plink_geno)
+err_beta_BB&lt;-t(BB_plink_geno)%*%y_null_BB/nrow(BB_plink_geno)
+
+target_WB_N&lt;-300000
+target_BB_N&lt;-300000
+
+
+err_beta_WB_scale&lt;-sqrt(nrow(WB_plink_geno)/target_WB_N)*err_beta_WB
+err_beta_BB_scale&lt;-sqrt(nrow(BB_plink_geno)/target_BB_N)*err_beta_BB
+
+z_WB&lt;-(beta_WB_marginal+err_beta_WB_scale)*sqrt(target_WB_N)
+z_BB&lt;-(beta_BB_marginal+err_beta_BB_scale)*sqrt(target_BB_N)
+
+
+R_mat_list=list(&quot;WB&quot; = WB_cov,&quot;BB&quot; = BB_cov)
+
+summary_stat_1 = data.frame(&quot;SNP&quot; = colnames(WB_cov), &quot;Beta&quot;=beta_WB_marginal+err_beta_WB_scale,&quot;Se&quot;=1/sqrt(target_WB_N), &quot;Z&quot; =z_WB,  &quot;N&quot; =target_WB_N )
+summary_stat_2 = data.frame(&quot;SNP&quot; = colnames(WB_cov), &quot;Beta&quot;=beta_BB_marginal+err_beta_BB_scale,&quot;Se&quot;=1/sqrt(target_BB_N), &quot;Z&quot; =z_BB,  &quot;N&quot; =target_BB_N )
+summary_stat_sd_list = list(&quot;WB&quot; = summary_stat_1,&quot;BB&quot;=summary_stat_2 )  
+save(R_mat_list,summary_stat_sd_list,file=&quot;/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData&quot;)</code></pre>
+</div>
+<div id="input-of-mesusie" class="section level3">
+<h3>Input of MESuSiE</h3>
+<p>For the input of the MESuSiE, we require a list of summary statistics
+and a list of LD matrices from multiple ancestries.</p>
+<pre class="r"><code>load(&quot;/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData&quot;)
+summary_stat_sd_list</code></pre>
+<pre><code>$WB
+             SNP          Beta          Se          Z     N
+rs74063479  SNP1  0.0011203766 0.001825742  0.6136555 3e+05
+rs113274765 SNP2 -0.0003569601 0.001825742 -0.1955151 3e+05
+rs3122053   SNP3  0.0242512526 0.001825742 13.2829581 3e+05
+rs3120831   SNP4  0.0241407370 0.001825742 13.2224262 3e+05
+rs3008244   SNP5  0.0202160136 0.001825742 11.0727667 3e+05
+rs3008245   SNP6  0.0203888545 0.001825742 11.1674355 3e+05
+
+$BB
+             SNP          Beta          Se            Z     N
+rs74063479  SNP1  1.268663e-02 0.001825742  6.948755612 3e+05
+rs113274765 SNP2  1.894104e-02 0.001825742 10.374434488 3e+05
+rs3122053   SNP3  1.898423e-02 0.001825742 10.398090252 3e+05
+rs3120831   SNP4  2.042313e-02 0.001825742 11.186207445 3e+05
+rs3008244   SNP5  4.181805e-04 0.001825742  0.229046904 3e+05
+rs3008245   SNP6 -3.255630e-06 0.001825742 -0.001783182 3e+05</code></pre>
+<p>Each element of the summary statistics list is a data frame of
+summary statistics from each ancestry with column name SNP, Beta, Se, Z,
+and N representing SNP information, marginal effect size, standard
+error, Z-scores and number of sample.</p>
+<pre class="r"><code>R_mat_list</code></pre>
+<pre><code>$WB
+                   SNP1        SNP2         SNP3         SNP4         SNP5
+rs74063479   1.00000000  0.81316429  0.015852174  0.016549732 -0.012114127
+rs113274765  0.81316429  1.00000000  0.034865906  0.034644305 -0.025684319
+rs3122053    0.01585217  0.03486591  1.000000000  0.991905807 -0.008160074
+rs3120831    0.01654973  0.03464431  0.991905807  1.000000000 -0.006572290
+rs3008244   -0.01211413 -0.02568432 -0.008160074 -0.006572290  1.000000000
+rs3008245   -0.01577946 -0.02880859 -0.007275435 -0.005639669  0.994683718
+                    SNP6
+rs74063479  -0.015779459
+rs113274765 -0.028808589
+rs3122053   -0.007275435
+rs3120831   -0.005639669
+rs3008244    0.994683718
+rs3008245    1.000000000
+
+$BB
+                    SNP1         SNP2         SNP3        SNP4         SNP5
+rs74063479   1.000000000  0.617458533  0.026597026  0.02800391  0.038078871
+rs113274765  0.617458533  1.000000000  0.007373416  0.01196394  0.004909298
+rs3122053    0.026597026  0.007373416  1.000000000  0.93120429 -0.015361016
+rs3120831    0.028003907  0.011963936  0.931204295  1.00000000 -0.019027855
+rs3008244    0.038078871  0.004909298 -0.015361016 -0.01902785  1.000000000
+rs3008245   -0.005648862 -0.012302170 -0.019180081 -0.02335316  0.792099091
+                    SNP6
+rs74063479  -0.005648862
+rs113274765 -0.012302170
+rs3122053   -0.019180081
+rs3120831   -0.023353156
+rs3008244    0.792099091
+rs3008245    1.000000000</code></pre>
+<p>Each element of the LD matrices list is a matrix of LD from each
+ancestry, with column name being SNP name matched up with the summary
+statistics.</p>
+</div>
+<div id="run-mesusie" class="section level3">
+<h3>Run MESuSiE</h3>
+<pre class="r"><code>MESuSiE_test&lt;-meSuSie_core(R_mat_list,summary_stat_sd_list,L=10)</code></pre>
+<pre><code>*************************************************************
+
+  Multiple Ancestry Sum of Single Effect Model (MESuSiE)          
+
+   Visit http://www.xzlab.org/software.html For Update            
+
+            (C) 2022 Boran Gao, Xiang Zhou                        
+
+              GNU General Public License                          
+
+*************************************************************
+# Start data processing for sufficient statistics 
+# Create MESuSiE object 
+# Start data analysis 
+
+# Data analysis is done, and now generates result 
+
+Potential causal SNPs with PIP &gt; 0.5:  SNP2 SNP4 SNP6 
+
+Credible sets for effects: 
+$cs
+$cs$L1
+[1] 4
+
+$cs$L3
+[1] 2
+
+$cs$L2
+[1] 5 6
+
+
+$purity
+   min.abs.corr mean.abs.corr median.abs.corr
+L1    1.0000000     1.0000000       1.0000000
+L3    1.0000000     1.0000000       1.0000000
+L2    0.9946837     0.9973419       0.9973419
+
+$cs_index
+[1] 1 3 2
+
+$coverage
+[1] 0.9991265 1.0000000 1.0000000
+
+$requested_coverage
+[1] 0.95
+
+
+ Use meSusie_plot_pip() for Mahattan and PIP Plot
+# Total time used for the analysis: 0 mins</code></pre>
+<pre class="r"><code>colnames(MESuSiE_test$pip_config)&lt;-c(&quot;PIP_WB&quot;,&quot;PIP_BB&quot;,&quot;PIP_Shared&quot;)
+rownames(MESuSiE_test$pip_config)&lt;-paste0(&quot;SNP&quot;,seq(1,6))
+MESuSiE_test$pip_config</code></pre>
+<pre><code>         PIP_WB     PIP_BB PIP_Shared
+SNP1 0.07142857 0.07142857 0.02380952
+SNP2 0.07142857 0.73887144 0.26112856
+SNP3 0.07142857 0.07142857 0.02380952
+SNP4 0.07142857 0.07142857 0.99912652
+SNP5 0.21516027 0.07142857 0.07171547
+SNP6 0.53485169 0.07142857 0.17827258</code></pre>
+<p>We can see that there are 3 SNPs that reaching posterior inclusion
+probability (PIP) cutoff 0.5. We further check the PIP of SNP being
+ancestry-specific and shared, and found that SNP4 being shared, SNP2 and
+SNP6 being ancestry-specific</p>
+</div>
+<div id="run-susie" class="section level3">
+<h3>Run SuSiE</h3>
+<pre class="r"><code>library(susieR)
+susie_WB&lt;-susie_rss(summary_stat_sd_list$WB$Z,R_mat_list$WB)
+susie_BB&lt;-susie_rss(summary_stat_sd_list$BB$Z,R_mat_list$BB)
+susie_WB$pip</code></pre>
+<pre><code>     SNP1      SNP2      SNP3      SNP4      SNP5      SNP6 
+0.0000000 0.0000000 0.7392022 0.2607978 0.2847549 0.7152451 </code></pre>
+<pre class="r"><code>susie_BB$pip</code></pre>
+<pre><code>        SNP1         SNP2         SNP3         SNP4         SNP5         SNP6 
+8.326673e-14 1.000000e+00 3.836731e-04 9.996163e-01 0.000000e+00 0.000000e+00 </code></pre>
+<p>We further run the univariate SuSiE, and found that SNP 3 and 6 being
+European-specific signals, SNP 2 and 4 being African-specific signal
+with a PIP cutoff 0.5</p>
+</div>
+<div id="run-paintor" class="section level3">
+<h3>Run Paintor</h3>
+<pre class="r"><code>##We load the Paintor result directly
+paintor_post&lt;-read.table(paste0(&quot;/net/fantasia/home/borang/Genotype/Fig1/result/fig1.mcmc.paintor&quot;),header=T)
+paintor_post</code></pre>
+<pre><code>  CHR      POS RSID   zscore_1   zscore_2 Posterior_Prob
+1   1 25868115 SNP1 -0.4771679 5.49760644       0.456068
+2   1 25899926 SNP2 -0.7226137 6.23662118       0.994460
+3   1 25811488 SNP3  5.2582050 7.19895385       0.642364
+4   1 25856720 SNP4  5.2437257 7.79872412       0.993988
+5   1 25943096 SNP5  6.1736746 0.49037982       0.534416
+6   1 25952065 SNP6  6.6161982 0.02027758       0.950876</code></pre>
+<p>Paintor identifies SNP2-5 as signals without distinguishing
+ancestry-specific or shared causal variant.</p>
+</div>
+<div id="summarization-plot" class="section level3">
+<h3>Summarization Plot</h3>
+<p><img src="Fig_1.jpeg" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.6 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas/libblas.so.3
+LAPACK: /usr/lib/x86_64-linux-gnu/libopenblasp-r0.2.20.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] susieR_0.11.84    mvtnorm_1.1-3     snpStats_1.46.0   Matrix_1.4-1     
+ [5] survival_3.3-1    data.table_1.14.2 progress_1.2.2    MESuSiE_1.0      
+ [9] devtools_2.4.3    usethis_2.1.5    
+
+loaded via a namespace (and not attached):
+ [1] sass_0.4.1          pkgload_1.3.1       jsonlite_1.8.3     
+ [4] splines_4.2.2       bslib_0.3.1         assertthat_0.2.1   
+ [7] mixsqp_0.3-43       yaml_2.3.5          remotes_2.4.2      
+[10] sessioninfo_1.2.2   pillar_1.8.1        lattice_0.20-45    
+[13] glue_1.6.2          digest_0.6.30       promises_1.2.0.1   
+[16] colorspace_2.0-3    htmltools_0.5.2     httpuv_1.6.5       
+[19] plyr_1.8.7          pkgconfig_2.0.3     zlibbioc_1.42.0    
+[22] purrr_0.3.4         scales_1.2.1        processx_3.8.0     
+[25] later_1.3.0         git2r_0.30.1        tibble_3.1.7       
+[28] generics_0.1.2      ggplot2_3.3.6       ellipsis_0.3.2     
+[31] cachem_1.0.6        BiocGenerics_0.42.0 cli_3.4.1          
+[34] magrittr_2.0.3      crayon_1.5.2        memoise_2.0.1      
+[37] evaluate_0.18       ps_1.7.2            fs_1.5.2           
+[40] fansi_1.0.3         pkgbuild_1.3.1      RcppZiggurat_0.1.6 
+[43] tools_4.2.2         prettyunits_1.1.1   hms_1.1.2          
+[46] lifecycle_1.0.3     matrixStats_0.62.0  stringr_1.4.0      
+[49] munsell_0.5.0       irlba_2.3.5         callr_3.7.3        
+[52] Rfast_2.0.6         compiler_4.2.2      jquerylib_0.1.4    
+[55] rlang_1.0.6         grid_4.2.2          rstudioapi_0.13    
+[58] rmarkdown_2.14      gtable_0.3.1        DBI_1.1.2          
+[61] reshape_0.8.9       curl_4.3.2          R6_2.5.1           
+[64] knitr_1.39          dplyr_1.0.9         fastmap_1.1.0      
+[67] utf8_1.2.2          workflowr_1.7.0     rprojroot_2.0.3    
+[70] stringi_1.7.6       parallel_4.2.2      Rcpp_1.0.8.3       
+[73] vctrs_0.5.0         tidyselect_1.1.2    xfun_0.31          </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

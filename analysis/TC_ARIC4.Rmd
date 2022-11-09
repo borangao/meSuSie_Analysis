@@ -1,0 +1,201 @@
+---
+title: "Ancestry-specific causal variant example"
+author: "borangao"
+date: "2022-11-09"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## MESuSiE captures ancestry-specific causal signal
+
+This is to reproduce the real data analysis result of fine-mapping TC across EUR and AFR ancestries in the manuscript. The processed data and manual annotations can be found at the [data directory](https://drive.google.com/drive/folders/1hgzCXntiMVUtlOaHPeJP3TqMRbnGdOUj?usp=sharing). 
+
+
+```{r}
+load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/TC_ARIC4.RData")
+library(MESuSiE)
+
+```
+
+### GWAS across ancestries
+
+We'll start with exploring the region by locuszoom plot. 
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+###Draw the plot
+library(ggpubr)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(ggpmisc)
+library(VennDiagram)
+library(gridExtra)
+library(DescTools)
+			###Function used for locuszoom plot
+gwas_plot_fun<-function(res,pip,r2,lead_SNP,xlab_name,ylab_name,yintercept){
+			  
+			  
+			  data_plot = data.frame(SNP = res$SNP,r2 = r2, POS = res$POS,pip = pip)
+			  data_plot = data_plot[order(data_plot$r2),]
+			  p_manhattan = ggplot() + geom_point(data =data_plot[-(data_plot$SNP==lead_SNP),], aes(x = POS, y = pip, color = r2),size = 1.5)
+			  p_manhattan = p_manhattan + geom_point(data =data_plot[data_plot$SNP==lead_SNP,], aes(x = POS, y = pip),shape = 3,size = 2.5,color="red")
+			  p_manhattan = p_manhattan + geom_text(data =data_plot[data_plot$SNP==lead_SNP,], mapping=aes(x=POS, y=pip, label=SNP),vjust=1.2, size=3,show.legend = FALSE)
+			  p_manhattan = p_manhattan + theme_bw()+scale_color_stepsn(
+			    colors = c("navy", "lightskyblue", "green", "orange", "red"),
+			    breaks = seq(0.2, 0.8, by = 0.2),
+			    limits = c(0, 1),
+			    show.limits = TRUE,
+			    na.value = 'grey50',
+			    name = expression(R^2)
+			  )
+			  p_manhattan = p_manhattan + geom_hline(
+			    yintercept =yintercept,
+			    linetype = "dashed",
+			    color = "grey50",
+			    size = 0.5
+			  ) + geom_vline(
+			    xintercept = data_plot$POS[data_plot$SNP==lead_SNP],
+			    linetype = "dashed",
+			    color = "grey50",
+			    size = 0.5
+			  ) 
+			  p_manhattan= p_manhattan+xlab(xlab_name)+ylab(ylab_name)
+			  p_manhattan= p_manhattan+guides(fill=guide_legend(title=as.expression(bquote(R^2))))
+			  return(p_manhattan)
+			}
+			###Function used for PIP plot	
+
+#######################################################################
+lead_SNP<-which.max(abs(candidate_region$zscore_WB))
+candidate_region$r2_EU = unname(unlist((WB_LD[,..lead_SNP])^2))
+candidate_region$r2_AA = unname(unlist((BB_LD[,..lead_SNP])^2))
+
+p_EU<-gwas_plot_fun(candidate_region,-log10(2*pnorm(-abs(candidate_region$zscore_WB))),candidate_region$r2_EU,candidate_region$SNP[lead_SNP],"UKBB GWAS","-log10(Pvalue)",-log10(5e-8))
+p_AA<-gwas_plot_fun(candidate_region,-log10(2*pnorm(-abs(candidate_region$zscore_BB))),candidate_region$r2_AA,candidate_region$SNP[lead_SNP],"AA GWAS","-log10(Pvalue)",-log10(5e-8))
+
+
+library(data.table)
+	Gene_List<-fread("/net/fantasia/home/borang/Susie_Mult/simulation/simu_0120/data/Gencode_GRCh37_Genes_UniqueList2021.txt",header=T)
+	Gene_List_sub_coding<-Gene_List%>%filter(Chrom==paste0("chr",unique(candidate_region$CHR)))%>%filter(Start<max(candidate_region$POS),End>min(candidate_region$POS))%>%filter(Coding=="proteincoding")%>%filter(!is.na(cdsLength))
+
+  
+plot.range <- c(min(candidate_region$POS),max(candidate_region$POS))
+	  
+p2 <- ggplot(data = Gene_List_sub_coding) + 
+  geom_linerange(aes(x = Gene, ymin = Start, ymax = End)) +
+  coord_flip() + ylab("") + ylim(plot.range) + 
+  geom_text(aes(x = Gene, y = Start, label = Gene), fontface = 2, alpha = I(0.7), hjust = "right", size= 2.5) + 
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(), 
+        strip.text.y = element_text(angle = 0),
+        legend.position="bottom", 
+        panel.grid.major.y = element_blank()) + 
+  expand_limits(y=c(-1, 1))
+ 
+p_EU<-p_EU+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),legend.position="None")
+p_AA<-p_AA+ theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),legend.position="None")
+p2<-p2+ theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),legend.position="None")
+
+combined_plot_1<-(p_EU+p_AA)/(p2+p2)+plot_layout(guides = 'collect')&theme(legend.position = "bottom")
+combined_plot_1
+```
+We can see that rs6601924 is the leading SNP in the UKBB, but no strong marginal associations in the African ancestry with maximum -log10(P-value) less than 4. This suggests there is European ancestry-specific causal variant within the region.
+
+### Univariate fine-mapping
+We'll do the analysis by performing univariate fine-mapping method in each ancestry.
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+finemap_plot_fun<-function(res,pip,r2,cat_label,lead_SNP,xlab_name,ylab_name,yintercept){
+			  
+			  
+			  data_plot = data.frame(SNP = res$SNP,r2 = r2, POS = res$POS,pip = pip,cat =cat_label )
+			  data_plot$cat<-factor(data_plot$cat)
+			  levels(data_plot$cat) = list("Non" = "0","EU" = "1","AA" = "2","Shared" = "3","Paintor"="4")
+			  data_plot = data_plot[order(data_plot$r2),]
+			  p_manhattan = ggplot() + geom_point(data =data_plot[-(data_plot$SNP==lead_SNP),], aes(x = POS, y = pip, color = r2,shape = cat,size=cat))+scale_shape_manual(name="Category",drop=FALSE,values=c( 16, 17,15,3,18))+scale_size_manual(values=c( 1.5, 2.5,2.5,2.5,2.5))+guides( size = FALSE)
+			  p_manhattan = p_manhattan + geom_point(data =data_plot[data_plot$SNP==lead_SNP,], aes(x = POS, y = pip),shape = 3,size = 2.5,color="red")
+			  p_manhattan = p_manhattan + geom_text(data =data_plot[data_plot$SNP==lead_SNP,], mapping=aes(x=POS, y=pip, label=SNP),vjust=1.2, size=3,show.legend = FALSE)
+			  p_manhattan = p_manhattan + theme_bw()+scale_color_stepsn(
+			    colors = c("navy", "lightskyblue", "green", "orange", "red"),
+			    breaks = seq(0.2, 0.8, by = 0.2),
+			    limits = c(0, 1),
+			    show.limits = TRUE,
+			    na.value = 'grey50',
+			    name = expression(R^2)
+			  )
+			  p_manhattan = p_manhattan + geom_hline(
+			    yintercept =yintercept,
+			    linetype = "dashed",
+			    color = "grey50",
+			    size = 0.5
+			  ) + geom_vline(
+			    xintercept = data_plot$POS[data_plot$SNP==lead_SNP],
+			    linetype = "dashed",
+			    color = "grey50",
+			    size = 0.5
+			  ) 
+			  p_manhattan= p_manhattan+xlab(xlab_name)+ylab(ylab_name)
+			  p_manhattan= p_manhattan+guides(fill=guide_legend(title=as.expression(bquote(R^2))))
+			  return(p_manhattan)
+}			
+
+
+####Category Setting
+SuSiE_cat = rep(0,nrow(candidate_region))
+SuSiE_cat[candidate_region$SuSiE_WB>0.5&candidate_region$SuSiE_BB>0.5]<-3
+SuSiE_cat[candidate_region$SuSiE_WB>0.5&candidate_region$SuSiE_BB<0.5]<-1
+SuSiE_cat[candidate_region$SuSiE_WB<0.5&candidate_region$SuSiE_BB>0.5]<-2
+SuSiE_cat<-factor(SuSiE_cat)
+
+
+#################################
+
+
+p_EU_SuSiE<-finemap_plot_fun(candidate_region,candidate_region$SuSiE_WB,candidate_region$r2_EU,SuSiE_cat,candidate_region$SNP[lead_SNP],"SuSiE UKBB","PIP",0.5)
+p_AA_SuSiE<-finemap_plot_fun(candidate_region,candidate_region$SuSiE_BB,candidate_region$r2_AA,SuSiE_cat,candidate_region$SNP[lead_SNP],"SuSiE AA","PIP",0.5)
+
+
+
+combined_plot_1<-(p_EU+p_AA)/(p_EU_SuSiE+p_AA_SuSiE)/(p2+p2)+plot_layout(guides = 'collect')&theme(legend.position = "bottom")
+combined_plot_1
+
+```
+
+Univariate SuSiE detects signals in European ancestry, and no signal is found in African ancestry
+
+### Multi-ancestry fine-mapping
+We further check the performance of MESuSiE in the scenario with only ancestry-specific causal variant.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+####Category Setting
+
+Paintor_cat = rep(0,nrow(candidate_region))
+Paintor_cat[candidate_region$Paintor_PIP>0.5]<-4
+Paintor_cat<-factor(Paintor_cat)
+
+MESuSiE_cat = rep(0,nrow(candidate_region))
+MESuSiE_cat[candidate_region$MESuSiE_PIP_WB>0.5]<-1
+MESuSiE_cat[candidate_region$MESuSiE_PIP_BB>0.5]<-2
+MESuSiE_cat[candidate_region$MESuSiE_PIP_Shared>0.5]<-3
+MESuSiE_cat<-factor(MESuSiE_cat)
+
+
+p_MESuSiE<-finemap_plot_fun(candidate_region,candidate_region$MESuSiE_PIP_Either,candidate_region$r2_EU,MESuSiE_cat,candidate_region$SNP[lead_SNP],"MESuSiE","PIP",0.5)
+p_Paintor<-finemap_plot_fun(candidate_region,candidate_region$Paintor_PIP,candidate_region$r2_EU,Paintor_cat,candidate_region$SNP[lead_SNP],"Paintor","PIP",0.5)
+
+combined_plot<-(p_EU+p_AA)/(p_EU_SuSiE+p_AA_SuSiE)/(p_MESuSiE+p_Paintor)/(p2+p2)+plot_layout(guides = 'collect')&theme(legend.position = "bottom")
+combined_plot
+
+```
+Our proposed method MESuSiE detects the leading signal rs6601924 as European ancestry-specific signal,  Paintor also detects the leading variant rs6601924 as signal, while can not distinguish detected signal as shared or ancestry-specific.
+

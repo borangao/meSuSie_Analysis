@@ -1,5 +1,5 @@
 ---
-title: "Introduction to meSuSie"
+title: "Introduction to MESuSiE"
 author: "Boran Gao"
 date: "2022-05-30"
 site: workflowr::wflow_site
@@ -10,14 +10,16 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Introduction to meSuSie
-meSuSie is a multiple ancestry extension of Sum of Single Effect model for GWAS fine-mapping. meSuSie assumes that the causal SNPs are shared across ancestries, thought differ in effect size due to allele heterogeneity, and hence the power of analysis increases by jointly modelling the effect across ancestries. By leveraging the independent effect assumption of SuSie, meSuSie models the correlation structure of the effect sizes of causal SNPs across ancestries, and therefore further improve the power of causal SNP detection.
+# Introduction to MESuSiE
+MESuSiE is a multiple ancestry extension of Sum of Single Effect model for GWAS fine-mapping. MESuSiE assumes that the causal SNPs are shared across ancestries, thought differ in effect size due to allele heterogeneity, and hence the power of analysis increases by jointly modelling the effect across ancestries. By leveraging the independent effect assumption of SuSie, MESuSiE models the correlation structure of the effect sizes of causal SNPs across ancestries, and therefore further improve the power of causal SNP detection.
 
-## meSuSie Example
-![](Fig_1.jpeg)
+## MESuSiE Overview
+MESuSiE relies on GWAS summary statistics from multiple ancestries, properly accounts for the LD structure of the focal genomic region in multiple ancestries, and explicitly models both shared and ancestry-specific causal signals to accommodate causal effect size similarity as well as heterogeneity across ancestries. MESuSiE outputs posterior inclusion probability of variant being shared or ancestry-specific causal variants. 
 
-## meSuSie Model Overview
-meSuSie builds upon the sum of single effect model, and extend the normal assumption on the effec size of causal SNP to multivariate normal, and thus capture the correlation across ancestries.
+![](MESuSiE_Illustration.jpg)
+
+## MESuSiE Model 
+MESuSiE builds upon the sum of single effect model, and extend the normal assumption on the effec size of causal SNP to multivariate normal, and thus capture the correlation across ancestries.
 fashion:
 $$
   \left(\begin{matrix}{y}_\mathbf{1}\\{y}_\mathbf{2}\\\end{matrix}\right)=\left[\begin{matrix}{X}_\mathbf{1}&0\\0&{X}_\mathbf{2}\\\end{matrix}\right]\ast\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right)+\left(\begin{matrix}{\epsilon}_\mathbf{1}\\{\epsilon}_\mathbf{2}\\\end{matrix}\right), 
@@ -27,3 +29,4 @@ $$
 \left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right) = \sum_l \gamma_l\bigotimes \left(z_l\cdot\left(\begin{matrix}{\beta}_\mathbf{1l}\\{\beta}_\mathbf{2l}\\\end{matrix}\right) \right)
 $$
 which represents the summation of the single effects.
+

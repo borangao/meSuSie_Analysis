@@ -1,12 +1,18 @@
 name: meSuSie_Analysis
 output_dir: ../docs
 navbar:
-  title: meSuSie
+  title: MESuSiE
   left:
   - text: Introduction
     href: index.html
+  - text: Installation
+    href: installation.html
   - text: Example Analysis
-    href: example_analysis.html
+    menu:
+    - text: Shared Causal Variant
+      href: HDL_APOE.html
+    - text: Ancestry-specific Causal Variant
+      href: TC_ARIC4.html
   right:
   - icon: fab fa-github
     text: Source code

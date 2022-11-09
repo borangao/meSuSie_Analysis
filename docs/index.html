@@ -13,7 +13,7 @@
 
 <meta name="date" content="2022-05-30" />
 
-<title>Introduction to meSuSie</title>
+<title>Introduction to MESuSiE</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -331,7 +331,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">meSuSie</a>
+      <a class="navbar-brand" href="index.html">MESuSiE</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -359,7 +359,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Introduction to meSuSie</h1>
+<h1 class="title toc-ignore">Introduction to MESuSiE</h1>
 <h4 class="author">Boran Gao</h4>
 <h4 class="date">2022-05-30</h4>
 
@@ -390,7 +390,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-05-31
+<strong>Last updated:</strong> 2022-11-08
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -440,15 +440,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreed41b59e599f7ee711f71476d2da27e9cbc39d55etargetblankd41b59ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/d41b59e599f7ee711f71476d2da27e9cbc39d55e" target="_blank">d41b59e</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreed41b59e599f7ee711f71476d2da27e9cbc39d55etargetblankd41b59ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -458,7 +458,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/d41b59e599f7ee711f71476d2da27e9cbc39d55e" target="_blank">d41b59e</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -473,6 +473,8 @@ were generated:
 </p>
 <pre><code>
 Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/about.Rmd
     Modified:   analysis/index.Rmd
 
 </code></pre>
@@ -518,6 +520,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/e369d34dbed53df7f53f400a7fc794afa1c4d5a3/analysis/index.Rmd" target="_blank">e369d34</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-05-31
+</td>
+<td>
+wflow_git_commit(all = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/e369d34dbed53df7f53f400a7fc794afa1c4d5a3/docs/index.html" target="_blank">e369d34</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-05-31
+</td>
+<td>
+wflow_git_commit(all = TRUE)
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -594,22 +630,29 @@ Start workflowr project.
 </div>
 </div>
 <div id="introduction-to-mesusie" class="section level1">
-<h1>Introduction to meSuSie</h1>
-<p>meSuSie is a multiple ancestry extension of Sum of Single Effect
-model for GWAS fine-mapping. meSuSie assumes that the causal SNPs are
+<h1>Introduction to MESuSiE</h1>
+<p>MESuSiE is a multiple ancestry extension of Sum of Single Effect
+model for GWAS fine-mapping. MESuSiE assumes that the causal SNPs are
 shared across ancestries, thought differ in effect size due to allele
 heterogeneity, and hence the power of analysis increases by jointly
 modelling the effect across ancestries. By leveraging the independent
-effect assumption of SuSie, meSuSie models the correlation structure of
+effect assumption of SuSie, MESuSiE models the correlation structure of
 the effect sizes of causal SNPs across ancestries, and therefore further
 improve the power of causal SNP detection.</p>
-<div id="mesusie-example" class="section level2">
-<h2>meSuSie Example</h2>
-<p><img src="Fig_1.jpeg" /></p>
+<div id="mesusie-overview" class="section level2">
+<h2>MESuSiE Overview</h2>
+<p>MESuSiE relies on GWAS summary statistics from multiple ancestries,
+properly accounts for the LD structure of the focal genomic region in
+multiple ancestries, and explicitly models both shared and
+ancestry-specific causal signals to accommodate causal effect size
+similarity as well as heterogeneity across ancestries. MESuSiE outputs
+posterior inclusion probability of variant being shared or
+ancestry-specific causal variants.</p>
+<p><img src="MESuSiE_Illustration.jpg" /></p>
 </div>
-<div id="mesusie-model-overview" class="section level2">
-<h2>meSuSie Model overview</h2>
-<p>meSuSie builds upon the sum of single effect model, and extend the
+<div id="mesusie-model" class="section level2">
+<h2>MESuSiE Model</h2>
+<p>MESuSiE builds upon the sum of single effect model, and extend the
 normal assumption on the effec size of causal SNP to multivariate
 normal, and thus capture the correlation across ancestries. fashion:
 <span class="math display">\[
