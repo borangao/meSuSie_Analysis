@@ -349,9 +349,6 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="toy_example.html">Toy Example</a>
-    </li>
-    <li>
       <a href="HDL_APOE.html">Shared Causal Variant</a>
     </li>
     <li>
@@ -388,7 +385,7 @@ example</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -399,8 +396,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -413,9 +410,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>meSuSie_Analysis/</code> <span
@@ -438,21 +435,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -543,15 +537,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree65fba54dc6812c6e5d0624bc67e8a30a14f55722targetblank65fba54a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/65fba54dc6812c6e5d0624bc67e8a30a14f55722" target="_blank">65fba54</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree21891c37a700f5c7776a141f0b6cd84751c47903targetblank21891c3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree65fba54dc6812c6e5d0624bc67e8a30a14f55722targetblank65fba54a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -561,7 +555,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/21891c37a700f5c7776a141f0b6cd84751c47903" target="_blank">21891c3</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/65fba54dc6812c6e5d0624bc67e8a30a14f55722" target="_blank">65fba54</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -575,18 +569,7 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/HDL_APOE.Rmd
-    Untracked:  analysis/TC_ARIC4.Rmd
-    Untracked:  analysis/illustration.Rmd
-    Untracked:  analysis/installation.Rmd
-    Untracked:  analysis/toy_example.Rmd
-
-Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
-    Modified:   analysis/index.Rmd
-
+working directory clean
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -600,10 +583,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/TC_ARIC4.Rmd</code>) and HTML
+(<code>docs/TC_ARIC4.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/analysis/TC_ARIC4.Rmd" target="_blank">65fba54</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/TC_ARIC4.html" target="_blank">65fba54</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-11-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -621,9 +668,46 @@ library(MESuSiE)</code></pre>
 <div id="gwas-across-ancestries" class="section level3">
 <h3>GWAS across ancestries</h3>
 <p>We’ll start with exploring the region by locuszoom plot.</p>
-<p><img src="figure/TC_ARIC4.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />
-We can see that rs6601924 is the leading SNP in the UKBB, but no strong
-marginal associations in the African ancestry with maximum
+<p><img src="figure/TC_ARIC4.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/TC_ARIC4.Rmd/unnamed-chunk-2-1.png" target="_blank">65fba54</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can see that rs6601924 is the leading SNP in the UKBB, but no
+strong marginal associations in the African ancestry with maximum
 -log10(P-value) less than 4. This suggests there is European
 ancestry-specific causal variant within the region.</p>
 </div>
@@ -632,6 +716,43 @@ ancestry-specific causal variant within the region.</p>
 <p>We’ll do the analysis by performing univariate fine-mapping method in
 each ancestry.
 <img src="figure/TC_ARIC4.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/TC_ARIC4.Rmd/unnamed-chunk-3-1.png" target="_blank">65fba54</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Univariate SuSiE detects signals in European ancestry, and no signal
 is found in African ancestry</p>
 </div>
@@ -639,8 +760,45 @@ is found in African ancestry</p>
 <h3>Multi-ancestry fine-mapping</h3>
 <p>We further check the performance of MESuSiE in the scenario with only
 ancestry-specific causal variant.</p>
-<p><img src="figure/TC_ARIC4.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" />
-Our proposed method MESuSiE detects the leading signal rs6601924 as
+<p><img src="figure/TC_ARIC4.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/TC_ARIC4.Rmd/unnamed-chunk-4-1.png" target="_blank">65fba54</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2022-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Our proposed method MESuSiE detects the leading signal rs6601924 as
 European ancestry-specific signal, Paintor also detects the leading
 variant rs6601924 as signal, while can not distinguish detected signal
 as shared or ancestry-specific.</p>
@@ -678,37 +836,38 @@ other attached packages:
  [4] futile.logger_1.4.3 ggpmisc_0.4.7       ggpp_0.4.4         
  [7] patchwork_1.1.1     tidyr_1.2.0         dplyr_1.0.9        
 [10] data.table_1.14.2   ggpubr_0.4.0        ggplot2_3.3.6      
-[13] MESuSiE_1.0        
+[13] MESuSiE_1.0         workflowr_1.7.0    
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.3           sass_0.4.1           jsonlite_1.8.3      
- [4] splines_4.2.2        carData_3.0-5        bslib_0.3.1         
- [7] assertthat_0.2.1     expm_0.999-6         highr_0.9           
-[10] gld_2.6.5            lmom_2.8             cellranger_1.1.0    
-[13] yaml_2.3.5           pillar_1.8.1         backports_1.4.1     
-[16] lattice_0.20-45      quantreg_5.93        glue_1.6.2          
-[19] digest_0.6.30        promises_1.2.0.1     ggsignif_0.6.3      
-[22] colorspace_2.0-3     htmltools_0.5.2      httpuv_1.6.5        
-[25] Matrix_1.4-1         pkgconfig_2.0.3      broom_0.8.0         
-[28] SparseM_1.81         purrr_0.3.4          mvtnorm_1.1-3       
-[31] scales_1.2.1         rootSolve_1.8.2.3    later_1.3.0         
-[34] MatrixModels_0.5-0   git2r_0.30.1         tibble_3.1.7        
-[37] proxy_0.4-27         farver_2.1.1         generics_0.1.2      
-[40] car_3.0-13           ellipsis_0.3.2       withr_2.5.0         
-[43] cli_3.4.1            readxl_1.4.0         survival_3.3-1      
-[46] magrittr_2.0.3       evaluate_0.18        fs_1.5.2            
-[49] fansi_1.0.3          MASS_7.3-57          rstatix_0.7.0       
-[52] class_7.3-20         tools_4.2.2          formatR_1.12        
-[55] lifecycle_1.0.3      Exact_3.1            stringr_1.4.0       
-[58] munsell_0.5.0        lambda.r_1.2.4       compiler_4.2.2      
-[61] jquerylib_0.1.4      e1071_1.7-11         rlang_1.0.6         
-[64] rstudioapi_0.13      labeling_0.4.2       rmarkdown_2.14      
-[67] boot_1.3-28          gtable_0.3.1         abind_1.4-5         
-[70] DBI_1.1.2            R6_2.5.1             knitr_1.39          
-[73] fastmap_1.1.0        utf8_1.2.2           workflowr_1.7.0     
-[76] rprojroot_2.0.3      futile.options_1.0.1 stringi_1.7.6       
-[79] Rcpp_1.0.8.3         vctrs_0.5.0          tidyselect_1.1.2    
-[82] xfun_0.31           </code></pre>
+ [1] fs_1.5.2             httr_1.4.3           rprojroot_2.0.3     
+ [4] tools_4.2.2          backports_1.4.1      bslib_0.3.1         
+ [7] utf8_1.2.2           R6_2.5.1             DBI_1.1.2           
+[10] colorspace_2.0-3     withr_2.5.0          tidyselect_1.1.2    
+[13] Exact_3.1            processx_3.8.0       compiler_4.2.2      
+[16] git2r_0.30.1         cli_3.4.1            quantreg_5.93       
+[19] formatR_1.12         SparseM_1.81         expm_0.999-6        
+[22] labeling_0.4.2       sass_0.4.1           scales_1.2.1        
+[25] mvtnorm_1.1-3        callr_3.7.3          proxy_0.4-27        
+[28] stringr_1.4.0        digest_0.6.30        rmarkdown_2.14      
+[31] pkgconfig_2.0.3      htmltools_0.5.2      highr_0.9           
+[34] fastmap_1.1.0        rlang_1.0.6          readxl_1.4.0        
+[37] rstudioapi_0.13      jquerylib_0.1.4      generics_0.1.2      
+[40] farver_2.1.1         jsonlite_1.8.3       car_3.0-13          
+[43] magrittr_2.0.3       Matrix_1.4-1         Rcpp_1.0.8.3        
+[46] munsell_0.5.0        fansi_1.0.3          abind_1.4-5         
+[49] lifecycle_1.0.3      stringi_1.7.6        whisker_0.4         
+[52] yaml_2.3.5           carData_3.0-5        MASS_7.3-57         
+[55] rootSolve_1.8.2.3    promises_1.2.0.1     lmom_2.8            
+[58] lattice_0.20-45      splines_4.2.2        knitr_1.39          
+[61] ps_1.7.2             pillar_1.8.1         boot_1.3-28         
+[64] gld_2.6.5            ggsignif_0.6.3       futile.options_1.0.1
+[67] glue_1.6.2           evaluate_0.18        getPass_0.2-2       
+[70] lambda.r_1.2.4       vctrs_0.5.0          httpuv_1.6.5        
+[73] MatrixModels_0.5-0   cellranger_1.1.0     gtable_0.3.1        
+[76] purrr_0.3.4          assertthat_0.2.1     xfun_0.31           
+[79] broom_0.8.0          e1071_1.7-11         rstatix_0.7.0       
+[82] later_1.3.0          class_7.3-20         survival_3.3-1      
+[85] tibble_3.1.7         ellipsis_0.3.2      </code></pre>
 </div>
 </div>
 </div>

@@ -13,7 +13,7 @@
 
 <meta name="date" content="2022-11-09" />
 
-<title>Shared causal variant example</title>
+<title>toy_example</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -374,7 +374,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Shared causal variant example</h1>
+<h1 class="title toc-ignore">toy_example</h1>
 <h4 class="author">borangao</h4>
 <h4 class="date">2022-11-09</h4>
 
@@ -585,9 +585,9 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/HDL_APOE.Rmd</code>) and HTML
-(<code>docs/HDL_APOE.html</code>) files. If you’ve configured a remote
-Git repository (see <code>?wflow_git_remote</code>), click on the
+made to the R Markdown (<code>analysis/toy_example.Rmd</code>) and HTML
+(<code>docs/toy_example.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
 hyperlinks in the table below to view the files as they were in that
 past version.
 </p>
@@ -618,24 +618,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/analysis/HDL_APOE.Rmd" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/HDL_APOE.html" target="_blank">65fba54</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/analysis/toy_example.Rmd" target="_blank">65fba54</a>
 </td>
 <td>
 borangao
@@ -654,154 +637,8 @@ Build site.
 </div>
 </div>
 </div>
-<div id="mesusie-captures-shared-causal-signal" class="section level2">
-<h2>MESuSiE captures shared causal signal</h2>
-<p>This is to reproduce the real data analysis result of fine-mapping
-HDL across EUR and AFR ancestries in the manuscript. The processed data
-and manual annotations can be found at the <a
-href="https://drive.google.com/drive/folders/1hgzCXntiMVUtlOaHPeJP3TqMRbnGdOUj?usp=sharing">data
-directory</a>.</p>
-<pre class="r"><code>###Load the data
-load(&quot;/net/fantasia/home/borang/Susie_Mult/website_material/real_data/HDL_APOE.RData&quot;)
-library(MESuSiE)</code></pre>
-<div id="gwas-across-ancestries" class="section level3">
-<h3>GWAS across ancestries</h3>
-<p>We’ll start with exploring the region by locuszoom plot.</p>
-<p><img src="figure/HDL_APOE.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/HDL_APOE.Rmd/unnamed-chunk-2-1.png" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>We can see that rs429358 is the leading SNP in the UKBB, and also has
-a strong marginal association in the African ancestry with
--log10(P-value)&gt;40. rs429358 is a missense variant in the APOE
-region, which is known to be associated with lipid metabolism. With all
-these information together, it suggests rs429358 can be the shared
-causal variant for both ancestries.</p>
-</div>
-<div id="univariate-fine-mapping" class="section level3">
-<h3>Univariate fine-mapping</h3>
-<p>We’ll do the analysis by performing univariate fine-mapping method in
-each ancestry.
-<img src="figure/HDL_APOE.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/HDL_APOE.Rmd/unnamed-chunk-3-1.png" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Univariate SuSiE detects signals in both ancestries, but no shared
-causal signal is found.</p>
-</div>
-<div id="multi-ancestry-fine-mapping" class="section level3">
-<h3>Multi-ancestry fine-mapping</h3>
-<p>This motivates the multiple-ancestry fine-mapping techniques.</p>
-<p><img src="figure/HDL_APOE.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/figure/HDL_APOE.Rmd/unnamed-chunk-4-1.png" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Our proposed method MESuSiE detects the leading signal rs429358 as
-shared signals, and other shared causal signals in the regions, while
-Paintor can not distinguish detected signal as shared or
-ancestry-specific.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -828,47 +665,23 @@ locale:
 [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] grid      stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] DescTools_0.99.45   gridExtra_2.3       VennDiagram_1.7.3  
- [4] futile.logger_1.4.3 ggpmisc_0.4.7       ggpp_0.4.4         
- [7] patchwork_1.1.1     tidyr_1.2.0         dplyr_1.0.9        
-[10] data.table_1.14.2   ggpubr_0.4.0        ggplot2_3.3.6      
-[13] MESuSiE_1.0         workflowr_1.7.0    
+[1] workflowr_1.7.0
 
 loaded via a namespace (and not attached):
- [1] fs_1.5.2             httr_1.4.3           rprojroot_2.0.3     
- [4] tools_4.2.2          backports_1.4.1      bslib_0.3.1         
- [7] utf8_1.2.2           R6_2.5.1             DBI_1.1.2           
-[10] colorspace_2.0-3     withr_2.5.0          tidyselect_1.1.2    
-[13] Exact_3.1            processx_3.8.0       compiler_4.2.2      
-[16] git2r_0.30.1         cli_3.4.1            quantreg_5.93       
-[19] formatR_1.12         SparseM_1.81         expm_0.999-6        
-[22] labeling_0.4.2       sass_0.4.1           scales_1.2.1        
-[25] mvtnorm_1.1-3        callr_3.7.3          proxy_0.4-27        
-[28] stringr_1.4.0        digest_0.6.30        rmarkdown_2.14      
-[31] pkgconfig_2.0.3      htmltools_0.5.2      highr_0.9           
-[34] fastmap_1.1.0        rlang_1.0.6          readxl_1.4.0        
-[37] rstudioapi_0.13      jquerylib_0.1.4      generics_0.1.2      
-[40] farver_2.1.1         jsonlite_1.8.3       car_3.0-13          
-[43] magrittr_2.0.3       Matrix_1.4-1         Rcpp_1.0.8.3        
-[46] munsell_0.5.0        fansi_1.0.3          abind_1.4-5         
-[49] lifecycle_1.0.3      stringi_1.7.6        whisker_0.4         
-[52] yaml_2.3.5           carData_3.0-5        MASS_7.3-57         
-[55] rootSolve_1.8.2.3    promises_1.2.0.1     lmom_2.8            
-[58] lattice_0.20-45      splines_4.2.2        knitr_1.39          
-[61] ps_1.7.2             pillar_1.8.1         boot_1.3-28         
-[64] gld_2.6.5            ggsignif_0.6.3       futile.options_1.0.1
-[67] glue_1.6.2           evaluate_0.18        getPass_0.2-2       
-[70] lambda.r_1.2.4       vctrs_0.5.0          httpuv_1.6.5        
-[73] MatrixModels_0.5-0   cellranger_1.1.0     gtable_0.3.1        
-[76] purrr_0.3.4          assertthat_0.2.1     xfun_0.31           
-[79] broom_0.8.0          e1071_1.7-11         rstatix_0.7.0       
-[82] later_1.3.0          class_7.3-20         survival_3.3-1      
-[85] tibble_3.1.7         ellipsis_0.3.2      </code></pre>
-</div>
+ [1] Rcpp_1.0.8.3     compiler_4.2.2   pillar_1.8.1     bslib_0.3.1     
+ [5] later_1.3.0      git2r_0.30.1     jquerylib_0.1.4  tools_4.2.2     
+ [9] getPass_0.2-2    digest_0.6.30    jsonlite_1.8.3   evaluate_0.18   
+[13] tibble_3.1.7     lifecycle_1.0.3  pkgconfig_2.0.3  rlang_1.0.6     
+[17] cli_3.4.1        rstudioapi_0.13  yaml_2.3.5       xfun_0.31       
+[21] fastmap_1.1.0    httr_1.4.3       stringr_1.4.0    knitr_1.39      
+[25] sass_0.4.1       fs_1.5.2         vctrs_0.5.0      rprojroot_2.0.3 
+[29] glue_1.6.2       R6_2.5.1         processx_3.8.0   fansi_1.0.3     
+[33] rmarkdown_2.14   callr_3.7.3      magrittr_2.0.3   whisker_0.4     
+[37] ps_1.7.2         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6   </code></pre>
 </div>
 </div>
 
