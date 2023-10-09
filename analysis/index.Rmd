@@ -1,5 +1,5 @@
 ---
-title: "Introduction to MESuSiE"
+title: "MESuSiE"
 author: "Boran Gao"
 date: "2022-05-30"
 site: workflowr::wflow_site
@@ -9,15 +9,14 @@ output:
 editor_options:
   chunk_output_type: console
 ---
-# Introduction to MESuSiE
-MESuSiE is a multiple ancestry extension of Sum of Single Effect model for GWAS fine-mapping. MESuSiE assumes that the causal SNPs are shared across ancestries, thought differ in effect size due to allele heterogeneity, and hence the power of analysis increases by jointly modelling the effect across ancestries. By leveraging the independent effect assumption of SuSie, MESuSiE models the correlation structure of the effect sizes of causal SNPs across ancestries, and therefore further improve the power of causal SNP detection.
+# MESuSiE Overview
+![](Fig_1.png)
 
-## MESuSiE Overview
-MESuSiE relies on GWAS summary statistics from multiple ancestries, properly accounts for the LD structure of the focal genomic region in multiple ancestries, and explicitly models both shared and ancestry-specific causal signals to accommodate causal effect size similarity as well as heterogeneity across ancestries. MESuSiE outputs posterior inclusion probability of variant being shared or ancestry-specific causal variants. 
+MESuSiE is a multiple ancestry extension of Sum of Single Effect model for GWAS fine-mapping.MESuSiE relies on GWAS summary statistics from multiple ancestries, properly accounts for the LD structure of the focal genomic region in multiple ancestries, and explicitly models both shared and ancestry-specific causal signals to accommodate causal effect size similarity as well as heterogeneity across ancestries. MESuSiE outputs posterior inclusion probability of variant being shared or ancestry-specific causal variants. 
 
-![](MESuSiE_Illustration.jpg)
 
-## MESuSiE Model 
+
+# MESuSiE Model 
 MESuSiE builds upon the sum of single effect model, and extend the normal assumption on the effec size of causal SNP to multivariate normal, and thus capture the correlation across ancestries.
 fashion:
 $$
@@ -28,3 +27,6 @@ $$
 \left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right) = \sum_l \gamma_l\bigotimes \left(z_l\cdot\left(\begin{matrix}{\beta}_\mathbf{1l}\\{\beta}_\mathbf{2l}\\\end{matrix}\right) \right)
 $$
 which represents the summation of the single effects.
+
+
+**Note**: Our software is intended strictly for research purposes. We firmly stand against any form of racial discrimination and advocate for the ethical use of MESuSiE.

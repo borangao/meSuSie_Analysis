@@ -1,0 +1,220 @@
+---
+title: "Lipid_810"
+author: "borangao"
+date: "2023-10-09"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# 810 Regions of 4 lipid traits
+> **Note**: all the code and analysis reproduced here can be found in [Zenodo](https://zenodo.org/deposit/8411004#)
+
+This analysis is done by relaxing the P-value threshold when constructing candidate regions.
+
+## Feature of 95% credible set
+
+### a. Set size and eQTL enrichment of 95% credible set
+```{r,message=FALSE,warning=FALSE}
+library(ggpubr)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(ggpmisc)
+library(VennDiagram)
+library(gridExtra)
+library(ggbreak)
+library(DescTools)
+library(coin)
+library(susieR)
+library(ggrepel)
+library(stringr)
+
+
+load("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/01_07_Real_Data/summary_res/res.RData")
+
+#####################################################################
+#
+#     Plot directory and theme
+#
+####################################################################
+plot_dir<-"/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Real_Data/Lipid_810/Figure/"
+system(paste0("mkdir -p ",plot_dir))
+custom_theme <- function() {
+  theme(
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),  
+    axis.title.x = element_text(size = 7, face="bold"),
+    axis.title.y = element_text(size = 7, face="bold"),
+    strip.text.x = element_text(size = 5),
+    strip.text.y = element_text(size = 5),
+    strip.background = element_blank(),
+    legend.text = element_text(size=7),
+    legend.title = element_text(size=7, face="bold"),
+    plot.title = element_text(size=7, hjust = 0.5),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(), 
+    axis.line = element_line(color = "black")
+  )
+}
+################################################
+#
+#		Set Size/Z-score/eQTL 
+#
+#
+###############################################
+################################################
+#
+#		Set SiZe Part
+#
+###############################################		
+###Median set size by Trait
+all_sets_info<-data.frame(res_all%>%group_by(Trait,Region) %>% summarise(across(c("MESuSiE_cs", "SuSiE_cs","Paintor_cs"), ~ sum(.x, na.rm = TRUE))))%>%filter(MESuSiE_cs!=0, SuSiE_cs!=0, Paintor_cs!=0) ###Median Set Size across all locus
+all_sets_info_long<-all_sets_info%>%pivot_longer(!(Trait|Region), names_to = "Method", values_to = "Count")
+all_sets_info_long$Method<-factor(all_sets_info_long$Method,levels=c("MESuSiE_cs","SuSiE_cs","Paintor_cs"))
+levels(all_sets_info_long$Method)<-c("MESuSiE","SuSiE","Paintor")
+
+p_set = ggplot(data =all_sets_info_long,aes(x = Trait, y=Count,fill=Method))+geom_boxplot(aes(x = Trait,fill=Method),outlier.size = 0.1,fatten = 0.5,color = "darkgray")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"),guide=FALSE)
+p_set =p_set + theme_bw() + xlab("") +ylab("Set Size")+coord_cartesian(ylim=c(0,175))
+p_set= p_set+custom_theme()
+
+################################################
+#
+#		Z-score Part
+#
+###############################################		
+MESuSiE_cs_Z<-res_all%>%group_by(Trait) %>%filter(MESuSiE_cs==1)%>%summarise(zmax = median(pmax(abs(zscore_WB),abs(zscore_BB))))
+SuSiE_cs_Z<-res_all%>%group_by(Trait) %>%filter(SuSiE_cs==1)%>%summarise(zmax =median(pmax(abs(zscore_WB),abs(zscore_BB))))%>%pull(zmax)
+Paintor_cs_Z<-res_all%>%group_by(Trait) %>%filter(Paintor_cs==1)%>%summarise(zmax = median(pmax(abs(zscore_WB),abs(zscore_BB))))%>%pull(zmax)
+set_size_z_info<-data.frame(cbind(MESuSiE_cs_Z,SuSiE_cs_Z,Paintor_cs_Z))
+colnames(set_size_z_info)<-c("Trait",c("MESuSiE","SuSiE","Paintor"))
+set_size_z_info_long<-set_size_z_info %>%pivot_longer(!(Trait), names_to = "Method", values_to = "Z")%>%mutate(Method = factor(Method, levels=c("MESuSiE","SuSiE","Paintor")))
+
+p_z = ggplot(data = set_size_z_info_long,aes(x = Trait, y=Z,fill=Method))+geom_bar( stat = "identity",position="dodge")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"))
+p_z = p_z + geom_text(label = round(set_size_z_info_long$Z,2),position = position_dodge(width = 1),vjust=-0.5,size = 5*5/14)
+p_z = p_z + theme_bw() + xlab("") +ylab("Median |Z|")+ ylim(0,max(round(set_size_z_info_long$Z,2)+1))
+p_z = p_z +custom_theme()
+################################################
+#
+#		eQTL enrichment 
+#
+#
+###############################################	
+  ann_col_name<-c("missense", "synonymous", "utr_comb", "promotor", "CRE","liver_ind_eQTL")
+  # Functions for calculating fold enrichment
+  calc_fold_enrichment <- function(df, cs_col, ann_col_name) {
+    df %>%
+      group_by(Region) %>%
+      filter(sum(!!sym(cs_col)) != 0) %>%
+      group_by(Trait, !!sym(cs_col)) %>%
+      summarise(across(ann_col_name, ~ sum(.x, na.rm = TRUE) / n())) %>%
+      group_by(Trait) %>%
+      summarise(across(ann_col_name, ~ .x[!!sym(cs_col) == 1] / .x[!!sym(cs_col) == 0]))
+  }
+  res_all<-res_all%>%mutate(utr_comb = ifelse((utr_5+utr_3)!=0,1,0))
+  MESuSiE_PIP_ann <- calc_fold_enrichment(res_all, "MESuSiE_cs", ann_col_name)
+  SuSiE_PIP_ann <- calc_fold_enrichment(res_all, "SuSiE_cs", ann_col_name)
+  Paintor_PIP_ann <- calc_fold_enrichment(res_all, "Paintor_cs", ann_col_name)
+  # Combine results
+  Trait_CS_enrichment <- bind_rows(
+    MESuSiE_PIP_ann %>% mutate(Method = "MESuSiE"),
+    SuSiE_PIP_ann %>% mutate(Method = "SuSiE"),
+    Paintor_PIP_ann %>% mutate(Method = "Paintor")
+  ) %>% mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor")))%>%
+    dplyr::select(Trait,liver_ind_eQTL ,Method )%>%dplyr::rename(eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  Trait_CS_enrichment_long <- Trait_CS_enrichment %>%
+    pivot_longer(cols = -c(Method, Trait), names_to = "Cat", values_to = "Prop") %>%
+    mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor")))
+
+
+  
+p_eQTL <- ggplot(Trait_CS_enrichment_long, aes(x = Trait, y = Prop, fill = Method)) +
+  geom_bar(stat = "identity", position = "dodge") +scale_fill_manual(values = c("MESuSiE" = "#023e8a", "SuSiE" = "#2a9d8f", "Paintor" = "#f4a261")) +
+  geom_text(,label = round(Trait_CS_enrichment_long$Prop,2),position = position_dodge(width = 1),vjust=-0.5,size = 5*5/14)+
+  xlab("") + ylab("eQTL Fold Enrichment") + ylim(0,max(round(Trait_CS_enrichment_long$Prop))+1)+
+  theme_bw() + custom_theme()
+
+p_out<-p_set/p_z/p_eQTL+plot_layout(guides = "collect",heights = c(1.5,1,1))+plot_annotation(tag_levels = 'a')&theme(legend.position = 'bottom',plot.tag = element_text(size = 7, face = "bold"))
+p_out
+```
+
+### b. Functional enrichment of 95% credible set and top signals
+```{r,message=FALSE,warning=FALSE}
+################################################################################
+#
+#
+#     Functional Annotation enrichment for 95% credible set SNPS
+#
+#
+################################################################################
+# Enrichment of 95% credible set without by trait
+  calc_fold_enrichment_marginal<-function(df, cs_col, ann_col_name) {
+    df %>%group_by(Region) %>%
+      filter(sum(!!sym(cs_col)) != 0) %>%
+      group_by( !!sym(cs_col)) %>%
+      summarise(across(ann_col_name, ~ sum(.x, na.rm = TRUE) / n())) %>%
+      summarise(across(ann_col_name, ~ .x[!!sym(cs_col) == 1] / .x[!!sym(cs_col) == 0]))
+  }
+  MESuSiE_PIP_ann <- calc_fold_enrichment_marginal(res_all, "MESuSiE_cs", ann_col_name)
+  SuSiE_PIP_ann <- calc_fold_enrichment_marginal(res_all, "SuSiE_cs", ann_col_name)
+  Paintor_PIP_ann <- calc_fold_enrichment_marginal(res_all, "Paintor_cs", ann_col_name)
+  
+  CS_enrichment <- bind_rows(
+    MESuSiE_PIP_ann %>% mutate(Method = "MESuSiE"),
+    SuSiE_PIP_ann %>% mutate(Method = "SuSiE"),
+    Paintor_PIP_ann %>% mutate(Method = "Paintor")
+  ) %>% mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor")))%>% 
+    dplyr::rename(Missense = missense ,Synonymous = synonymous,UTR = utr_comb,Promotor = promotor,eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  CS_enrichment_long <- CS_enrichment %>%
+    pivot_longer(cols = -c(Method), names_to = "Cat", values_to = "Prop") %>%
+    mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor"))) %>%
+    mutate(Cat = factor(Cat, levels = c("Missense", "Synonymous", "UTR", "Promotor", "CRE","eQTL")))%>%
+    mutate(Prop = round(Prop, 2))
+p_set <- ggplot(data = CS_enrichment_long,aes(x = Cat, y = Prop, fill = Method)) +
+  geom_col(position = "dodge") + scale_fill_manual(values = c("MESuSiE" = "#023e8a", "SuSiE" = "#2a9d8f", "Paintor" = "#f4a261")) +
+  geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 5/14*5) + 
+  geom_hline(yintercept = 1, linetype = "dashed") + 
+  xlab("") + ylab("Fold Enrichment Credible Set") +ylim(0,round(max(CS_enrichment_long$Prop))+1) +
+  theme_bw() + custom_theme()
+################################################################################
+#
+#
+#     Functional Annotation enrichment for top 500 PIP SNPs
+#
+#
+################################################################################	
+  # Enrichment of top 500 signal
+  top_N_signal = 500
+  bg_an<-res_all%>%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))
+  MESuSiE_Signal_ann<-res_all%>%filter(MESuSiE_PIP_Shared>0.5|MESuSiE_PIP_WB>0.5|MESuSiE_PIP_BB>0.5)%>% arrange(desc(MESuSiE_PIP_Either))%>%top_n(n = top_N_signal, wt = MESuSiE_PIP_Either)%>%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  SuSiE_Signal_ann<-res_all%>%filter(SuSiE_PIP>0.5)%>% arrange(desc(SuSiE_PIP))%>%top_n(n = top_N_signal, wt = SuSiE_PIP)%>%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  Paintor_Signal_ann<-res_all%>%filter(Paintor_PIP>0.5) %>% arrange(desc(Paintor_PIP))%>%top_n(n = top_N_signal, wt = Paintor_PIP)%>%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  
+  Signal_enrichment <- bind_rows(
+    MESuSiE_Signal_ann %>% mutate(Method = "MESuSiE"),
+    SuSiE_Signal_ann %>% mutate(Method = "SuSiE"),
+    Paintor_Signal_ann %>% mutate(Method = "Paintor")
+  ) %>% mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor")))%>% 
+    dplyr::rename(Missense = missense ,Synonymous = synonymous,UTR = utr_comb,Promotor = promotor,eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  Signal_enrichment_long <- Signal_enrichment %>%
+    pivot_longer(cols = -c(Method), names_to = "Cat", values_to = "Prop") %>%
+    mutate(Method = factor(Method, levels = c("MESuSiE", "SuSiE", "Paintor"))) %>%
+    mutate(Cat = factor(Cat, levels = c("Missense", "Synonymous", "UTR", "Promotor", "CRE","eQTL")))%>%
+    mutate(Prop = round(Prop, 2))
+
+p_signal <- ggplot(data = Signal_enrichment_long,aes(x = Cat, y = Prop, fill = Method)) +
+  geom_col(position = "dodge") + scale_fill_manual(values = c("MESuSiE" = "#023e8a", "SuSiE" = "#2a9d8f", "Paintor" = "#f4a261")) +
+  geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 5/14*5) + 
+  geom_hline(yintercept = 1, linetype = "dashed") + 
+  xlab("") + ylab("Fold Enrichment Top Signal") +ylim(0,round(max(Signal_enrichment_long$Prop))+1) +
+  theme_bw() + custom_theme()
+p_out<-p_set/p_signal+plot_annotation(tag_levels = 'a')&theme(legend.position = 'bottom',plot.tag = element_text(size = 7, face = "bold"))
+p_out
+```
+

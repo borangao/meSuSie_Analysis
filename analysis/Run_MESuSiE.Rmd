@@ -1,0 +1,74 @@
+---
+title: "Run MESuSiE"
+author: "borangao"
+date: "2023-10-09"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# MESuSiE Example
+## 1. Data Formatting for MESuSiE:
+
+Use the example from Data preparation. We provide `organize data` and `organize_ld` function to do the sanity check and organize the summary statistics and LD into the MESuSiE input format
+
+```{r,message=FALSE, warning=FALSE}
+library(dplyr)
+library(MESuSiE)
+load("/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/data/MESuSiE_Example.RData")
+summ_stat_list<-organize_gwas(UKBB_example%>%rename(SNP = CHR_POS),GLGC_example%>%rename(SNP = CHR_POS),c("EUR","AFR"))
+colnames(WB_cov)<-UKBB_example$CHR_POS
+colnames(BB_cov)<-GLGC_example$CHR_POS
+LD_list<-organize_ld(WB_cov,BB_cov,summ_stat_list)
+
+```
+
+## 2. Run MESuSiE:
+```{r,message=FALSE, warning=FALSE}
+MESuSiE_res<-meSuSie_core(LD_list,summ_stat_list,L=10)
+```
+
+### MESuSiE Result Interpretation:
+
+The MESuSiE results can be interpreted in terms of the 95% credible set and SNP-level Posterior Inclusion Probabilities (PIPs).
+
+- **95% credible set**
+MESuSiE's 95% credible set comprises SNPs with a non-zero effect in at least one ancestry. These SNPs are further categorized as either "shared" or "ancestry-specific" based on their contribution to the credible set.
+
+For instance, in the provided example, the credible set contains 13 SNPs labeled as `EUR_AFR`, indicating these SNPs are shared across multiple ancestries.
+
+- **PIPs**
+We used a PIP cutoff of 0.5 to declare signal.
+
+  - **PIP for SNP have non-zero effect in at least one ancestry**
+  ```{r,message=FALSE, warning=FALSE}
+MESuSiE_res$pip[MESuSiE_res$cs$cs$L1]
+```
+In the example provided, one SNP exhibits a PIP greater than 0.5. However, this does not inform us whether the SNP is shared or ancestry-specific. To make that inference, we need to further analyze the PIP values for shared or ancestry-specific effects, which is the unique feature provided by MESuSiE.
+
+  - **PIP for shared or ancestry-specific effect**
+  ```{r,message=FALSE, warning=FALSE}
+MESuSiE_res$pip_config[MESuSiE_res$cs$cs$L1,]
+```
+From the results, SNP with a PIP greater than 0.5 represents a shared causal signal.
+
+## 3.Configuring Tuning Parameters
+
+When running `meSuSie_core`, various tuning parameters can be adjusted to refine the results:
+
+- **Number of Effects (`L`)**: Specify the number of effects to consider.
+- **Prior Weights (`prior_weights`)**: This represents the prior probability of a SNP being causal. By default, it is set to \frac{1}{p}. Users can adjust this parameter to incorporate functional annotation into MESuSiE.
+- **Ancestry Weight (`ancestry_weight`)**: Configure the weighting for different ancestries. We set the ratio of ancestry-specific to shared as 3:1 to encourage the ancestry-specific causal SNP detection. 
+  - **Pure shared signal:** ancestry weight can be set to c(0,0,1)
+  - **Encourage Ancestry-specific signal** ancestry weight can be set to c(5,5,1)/sum(c(5,5,1))
+- **Estimate Residual Variance (`estimate_residual_variance`)**: This parameter can be set to either TRUE or FALSE. When set to TRUE, the residual variance is estimated, while when set to FALSE, it is fixed at one. For multi-ancestry GWAS fine-mapping, it's typically advisable to fix the residual variance at one to enhance robustness, given that the heritability of the local region is often minimal. However, when using MESuSiE for multi-ancestry eQTL fine-mapping, it's recommended to estimate the residual variance since the heritability of the gene expression is relatively significant.
+- **Correlation Method and Threshold (`cor_method & cor_threshold`)**:
+  - **cor_method**: Choose the method to determine the 95% credible set based on SNP correlations within the region. Commonly used methods include determining the minimum, mean, or median of the absolute correlation values. By default, this is set to `min_abs_corr`, representing the minimum absolute correlation permissible within a credible set across ancestries. This is a prevalent threshold for genotype data in genetic studies.
+  - **cor_threshold**: Define the cutoff for `min_abs_corr`. By default, this is set to 0.5.
+
+> **Note**: We've made available function `meSuSie_get_cs` allowing users to tweak the results based on varying `cor_method` and `cor_threshold`. The best part? You can adjust without having to rerun the entire analysis.
+
+## 4. MESuSiE Visulization:
+```{r,message=FALSE, warning=FALSE}
+MESuSiE_Plot(MESuSiE_res,LD_list,summ_stat_list)
+```

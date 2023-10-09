@@ -1,5 +1,5 @@
 ---
-title: "Installation"
+title: "Installation and Motivating Example"
 author: "borangao"
 date: "2022-11-09"
 output: workflowr::wflow_html
@@ -7,144 +7,315 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Installation of MESuSiE
+# Installation of MESuSiE
 
 ```{r,message=FALSE,warning=FALSE}
 library(devtools)
 # Install MESuSiE
-install_github("borangao/MESuSiE")
+install_github("borangao/MESuSiE",dependencies = FALSE)
 # Load MESuSiE
 library(MESuSiE)
-library(progress)
 ```
 
-## Illustration example
-We will give the illustration example with the toy example data in the manuscript. For this toy example, we focused on six SNPs that belong to three distinct LD clusters in the region, with SNP 1/2, 3/4 and 5/6 in each cluster respectively, and with high SNP correlations within each cluster and weak SNP correlations between clusters. We set SNP 4 as the shared causal SNP and set SNPs 2 and 6 as the BB and WB-specific causal SNPs, respectively. 
+# Motivating Example
 
-### Data generation
+The motivating example is based on a toy dataset outlined in the manuscript.
+
+## 1. Data Characteristics
+
+The dataset contains:
+
+- Six SNPs categorized into three distinct LD clusters.
+- Within each cluster, the SNPs show strong correlations.
+- Between clusters, SNP correlations are weak.
+
+### SNP Grouping
+
+1. **Cluster 1**: Contains SNP 1 and 2.
+2. **Cluster 2**: Contains SNP 3 and 4.
+3. **Cluster 3**: Contains SNP 5 and 6.
+
+### Causal SNPs: 
+
+Based on our simulations, the SNPs are postulated to have the following causal relationships:
+
+- **SNP 4**: Simulated as a shared causal SNP across ancestries.
+- **SNP 2**: Simulated as the causal SNP specific to the BB ancestry.
+- **SNP 6**: Simulated as the causal SNP specific to the WB ancestry.
+
+
+## 2. Input of MESuSiE
+The data is provided with the package. For the input of the MESuSiE, we require a list of summary statistics and a list of LD matrices from multiple ancestries.
 ```{r,message=FALSE,warning=FALSE}
-library(data.table)
-library(snpStats)
-geno_dir<-paste0("/net/fantasia/home/borang/Genotype/Fig1/")
-
-WB_plink<-read.plink(paste0(geno_dir,"WB.bed"))
-BB_plink<-read.plink(paste0(geno_dir,"BB.bed"))
-WB_plink_geno<-as(WB_plink$genotypes,"numeric")
-WB_plink_geno<-apply(WB_plink_geno,2,function(x){
-  x[is.na(x)]=mean(x,na.rm=T)
-  x = scale(x)
-  return(x)
-})
-BB_plink_geno<-as(BB_plink$genotypes,"numeric")
-BB_plink_geno<-apply(BB_plink_geno,2,function(x){
-  x[is.na(x)]=mean(x,na.rm=T)
-  x = scale(x)
-  return(x)
-})
-
-BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]<-1*BB_plink_geno[,BB_plink$map$allele.1!=WB_plink$map$allele.1]
-
-WB_plink_geno<-WB_plink_geno[,c(3,4,1,2,5,6)]
-BB_plink_geno<-BB_plink_geno[,c(3,4,1,2,5,6)]
-WB_cov<-cov2cor(crossprod(WB_plink_geno))
-BB_cov<-cov2cor(crossprod(BB_plink_geno))
-
-
-colnames(WB_cov)<-paste0("SNP",seq(1,6,1))
-colnames(BB_cov)<-paste0("SNP",seq(1,6,1))
-
-colnames(WB_plink_geno)<-paste0("SNP",seq(1,6,1))
-colnames(BB_plink_geno)<-paste0("SNP",seq(1,6,1))
-
-
-causal_snp_list_1<-c("SNP2","SNP4")
-causal_snp_list_2<-c("SNP4","SNP6")
-
-
-num_causal_SNP=2
-library(mvtnorm)
-WB_plink_causal<-matrix(WB_plink_geno[colnames(WB_plink_geno)%in%causal_snp_list_1],ncol=num_causal_SNP)
-BB_plink_causal<-matrix(BB_plink_geno[colnames(BB_plink_geno)%in%causal_snp_list_2],ncol=num_causal_SNP)
-
-beta_BB<-c(0.02,0.02)
-beta_BB_all<-rep(0,ncol(BB_cov))
-beta_BB_all[which(colnames(BB_cov)%in%causal_snp_list_1)]<-beta_BB
-beta_BB_marginal<-BB_cov%*%beta_BB_all
-
-
-beta_WB<-c(0.02,0.02)
-beta_WB_all<-rep(0,ncol(WB_cov))
-beta_WB_all[which(colnames(WB_cov)%in%causal_snp_list_2)]<-beta_WB
-beta_WB_marginal<-WB_cov%*%beta_WB_all
-
-set.seed(881130)
-y_null_WB<-rnorm(nrow(WB_plink_geno),0,sqrt(1-var(WB_cov%*%beta_WB_all)))
-y_null_WB<-y_null_WB-mean(y_null_WB)
-y_null_BB<-rnorm(nrow(BB_plink_geno),0,sqrt(1-var(BB_cov%*%beta_BB_all)))
-y_null_BB<-y_null_BB-mean(y_null_BB)
-err_beta_WB<-t(WB_plink_geno)%*%y_null_WB/nrow(WB_plink_geno)
-err_beta_BB<-t(BB_plink_geno)%*%y_null_BB/nrow(BB_plink_geno)
-
-target_WB_N<-300000
-target_BB_N<-300000
-
-
-err_beta_WB_scale<-sqrt(nrow(WB_plink_geno)/target_WB_N)*err_beta_WB
-err_beta_BB_scale<-sqrt(nrow(BB_plink_geno)/target_BB_N)*err_beta_BB
-
-z_WB<-(beta_WB_marginal+err_beta_WB_scale)*sqrt(target_WB_N)
-z_BB<-(beta_BB_marginal+err_beta_BB_scale)*sqrt(target_BB_N)
-
-
-R_mat_list=list("WB" = WB_cov,"BB" = BB_cov)
-
-summary_stat_1 = data.frame("SNP" = colnames(WB_cov), "Beta"=beta_WB_marginal+err_beta_WB_scale,"Se"=1/sqrt(target_WB_N), "Z" =z_WB,  "N" =target_WB_N )
-summary_stat_2 = data.frame("SNP" = colnames(WB_cov), "Beta"=beta_BB_marginal+err_beta_BB_scale,"Se"=1/sqrt(target_BB_N), "Z" =z_BB,  "N" =target_BB_N )
-summary_stat_sd_list = list("WB" = summary_stat_1,"BB"=summary_stat_2 )  
-save(R_mat_list,summary_stat_sd_list,file="/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData")
-
-```
-
-### Input of MESuSiE
-For the input of the MESuSiE, we require a list of summary statistics and a list of LD matrices from multiple ancestries.
-```{r,message=FALSE,warning=FALSE}
-load("/net/fantasia/home/borang/Genotype/Fig1/Fig1.RData")
-summary_stat_sd_list
+data(summ_stat_list)
+data(LD_list)
+summ_stat_list
 ```
 Each element of the summary statistics list is a data frame of summary statistics from each ancestry with column name SNP, Beta, Se, Z, and N representing SNP information, marginal effect size, standard error, Z-scores and number of sample.
 ```{r,message=FALSE,warning=FALSE}
-R_mat_list
+LD_list
 ```
 Each element of the LD matrices list is a matrix of LD from each ancestry, with column name being SNP name matched up with the summary statistics. 
 
-### Run MESuSiE
-```{r,message=FALSE,warning=FALSE}
-MESuSiE_test<-meSuSie_core(R_mat_list,summary_stat_sd_list,L=10)
-colnames(MESuSiE_test$pip_config)<-c("PIP_WB","PIP_BB","PIP_Shared")
-rownames(MESuSiE_test$pip_config)<-paste0("SNP",seq(1,6))
-MESuSiE_test$pip_config
-```
-We can see that there are 3 SNPs that reaching posterior inclusion probability (PIP) cutoff 0.5. We further check the PIP of SNP being ancestry-specific and shared, and found that SNP4 being shared, SNP2 and SNP6 being ancestry-specific
+## 3. Analysis 
 
-### Run SuSiE
+### MESuSiE
+```{r,message=FALSE,warning=FALSE}
+MESuSiE_res<-meSuSie_core(LD_list,summ_stat_list,L=10)
+MESuSiE_res$pip_config
+```
+We observed that three SNPs have a posterior inclusion probability (PIP) exceeding the 0.5 threshold. Upon further examination of the PIP for ancestry-specificity and shared traits, we identified that SNP4 is shared, while SNP2 and SNP6 are ancestry-specific. The categories within the credible set indicate the ancestries affected by the SNPs present in the set.
+
+### SuSiE
 ```{r,message=FALSE,warning=FALSE}
 library(susieR)
-susie_WB<-susie_rss(summary_stat_sd_list$WB$Z,R_mat_list$WB)
-susie_BB<-susie_rss(summary_stat_sd_list$BB$Z,R_mat_list$BB)
+susie_WB<-susie_rss(summ_stat_list$WB$Z,LD_list$WB)
+susie_BB<-susie_rss(summ_stat_list$BB$Z,LD_list$BB)
 susie_WB$pip
 susie_BB$pip
 ```
-We further run the univariate SuSiE, and found that SNP 3 and 6 being European-specific signals, SNP 2 and 4 being African-specific signal with a PIP cutoff 0.5
+After executing the univariate SuSiE analysis, we determined that SNP 3 and 6 are signals specific to Europeans, while SNP 2 and 4 emerged as signals specific to Africans, using a PIP threshold of 0.5.
 
-### Run Paintor
+### Paintor
 ```{r,message=FALSE,warning=FALSE}
 ##We load the Paintor result directly
-paintor_post<-read.table(paste0("/net/fantasia/home/borang/Genotype/Fig1/result/fig1.mcmc.paintor"),header=T)
-paintor_post
+paintor_res<-read.table("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Simulation/091223/data/toy_example/result/fig1.mcmc.paintor",header=T)
+paintor_res$Posterior_Prob
 ```
 
 Paintor identifies SNP2-5 as signals without distinguishing ancestry-specific or shared causal variant.
 
 
-### Summarization Plot
-![](Fig_1.jpeg)
+## 4. Visualization
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=8}
+library(ggplot2)
+library(dplyr)
+###########################################################################
+#
+#
+#             Result Plot Part
+#
+#
+##########################################################################
+
+custom_theme <- function() {
+  theme(
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),  
+    axis.title.x = element_text(size = 7, face="bold"),
+    axis.title.y = element_text(size = 7, face="bold"),
+    strip.text.x = element_text(size = 5),
+    strip.text.y = element_text(size = 5),
+    strip.background = element_blank(),
+    legend.text = element_text(size=7),
+    legend.title = element_text(size=7, face="bold"),
+    plot.title = element_text(size=7, hjust = 0.5),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(), 
+    axis.line = element_line(color = "black")
+  )
+}
+
+
+#############################################################
+#
+#
+#
+#				Beta Plot
+#
+#
+#
+###############################################################
+beta_WB_all<-c(0,0,0,0.02,0,0.02)
+beta_BB_all<-c(0,0.02,0,0.02,0,0)
+WB_bar_data <- data.frame(SNP=paste0("SNP",seq(1,6,1)),Effect = beta_WB_all,Signal =c("None","BB","None","Shared","None","WB"))
+BB_bar_data <- data.frame(SNP=paste0("SNP",seq(1,6,1)),Effect = beta_BB_all,Signal =c("None","BB","None","Shared","None","WB"))
+# Grouped
+bar_WB<-ggplot(WB_bar_data, aes( y=Effect, x=SNP,fill = Signal)) + xlab("")+ylab("Effect")+
+  geom_bar(position="dodge", stat="identity")+theme_bw()+scale_fill_manual("Signal",values=c("WB"="#F2C1B6","BB"="#ABDB9F","Shared" = "#6162B0","None"="gray"))+theme(legend.position="none")
+bar_WB = bar_WB + custom_theme()
+bar_BB<-ggplot(BB_bar_data, aes( y=Effect, x=SNP,fill = Signal)) + xlab("")+ylab("Effect")+
+  geom_bar(position="dodge", stat="identity")+theme_bw()+scale_fill_manual("Signal",values=c("WB"="#F2C1B6","BB"="#ABDB9F","Shared" = "#6162B0","None"="gray"))+theme(legend.position="none")
+bar_BB = bar_BB + custom_theme()
+#############################################################
+#
+#
+#
+#				GWAS Plot
+#
+#
+#
+###############################################################
+z_WB<-summ_stat_list$WB$Z
+z_BB<-summ_stat_list$BB$Z
+gwas_data<-data.frame("SNP"=paste0("SNP",seq(1,6,1)),"WB_Pvalue"= -log10(2*pnorm(-abs(z_WB))),"BB_Pvalue"=-log10(2*pnorm(-abs(z_BB))))
+locuszoom_WB<-ggplot(gwas_data,aes(x=SNP,y=WB_Pvalue))+theme_bw()+geom_point(size =2)+
+                       geom_hline(yintercept=8, linetype="dashed", color = "red")+
+                       labs(x="",y="-log10 P-value") +custom_theme()
+locuszoom_BB<-ggplot(gwas_data,aes(x=SNP,y=BB_Pvalue))+theme_bw()+geom_point(size =2)+
+  geom_hline(yintercept=8, linetype="dashed", color = "red")+
+  labs(x="",y="-log10 P-value") +custom_theme()
+
+#############################################################
+#
+#
+#
+#					LD plot
+#
+#
+#
+###############################################################
+WB_cov<-LD_list$WB
+BB_cov<-LD_list$BB
+melt_WB_cov<-matrix(ncol=3,nrow=0)
+melt_WB_cov<-data.frame(melt_WB_cov)
+melt_BB_cov<-matrix(ncol=3,nrow=0)
+melt_BB_cov<-data.frame(melt_BB_cov)
+for(SNP1 in 1:6){
+  for(SNP2 in SNP1:6){
+    melt_WB_cov<-rbind(melt_WB_cov,c(paste0("SNP",SNP1),paste0("SNP",SNP2),WB_cov[SNP1,SNP2]))
+    melt_BB_cov<-rbind(melt_BB_cov,c(paste0("SNP",SNP1),paste0("SNP",SNP2),BB_cov[SNP1,SNP2]))
+  }
+}
+colnames(melt_WB_cov)<-c("SNP1","SNP2","Value")
+melt_WB_cov$Value<-(as.numeric(melt_WB_cov$Value))
+colnames(melt_BB_cov)<-c("SNP1","SNP2","Value")
+melt_BB_cov$Value<-(as.numeric(melt_BB_cov$Value))
+
+WB_cor<-ggplot(melt_WB_cov, aes(x = SNP1, y = SNP2, fill = Value)) +
+  geom_tile(aes( fill = abs(Value)))+scale_fill_stepsn(
+    colors = c( "#F7F172","#F7CD72","#F7A972","#F78E72", "#F77772"),
+    breaks = seq(0, 0.8, by = 0.2),
+    limits = c(0, 1),
+    show.limits = TRUE,
+    na.value = 'grey50',
+    name = "",guide = FALSE
+  )+
+  geom_text(aes(label=round(Value,2)),size = 5/14*5,fontface="bold")+
+  theme_bw() +xlab("White British")+ylab("Correlation") +custom_theme()
+
+BB_cor<-ggplot(melt_BB_cov, aes(x = SNP1, y = SNP2, fill = Value)) +
+  geom_tile(aes( fill = abs(Value)))+scale_fill_stepsn(
+    colors =  c( "#F7F172","#F7CD72","#F7A972","#F78E72", "#F77772"),
+    breaks = seq(0, 0.8, by = 0.2),
+    limits = c(0, 1),
+    show.limits = TRUE,
+    na.value = 'grey50',
+    name = "",guide = FALSE
+  )+
+  geom_text(aes(label=round(Value,2)), size = 5/14*5, fontface="bold")+
+  theme_bw() +xlab("Black British")+ylab("Correlation") +custom_theme()
+
+
+#############################################################
+#
+#
+#
+#				Fine mapping plot
+#
+#
+#
+###############################################################
+#############################################################
+#					MESuSie 
+#############################################################
+
+MESuSiE_pip<-data.frame(MESuSiE_res$pip_config)
+colnames(MESuSiE_pip)<-c("WB","BB","Shared")
+
+Signal_vec <- MESuSiE_pip %>%
+  mutate(Signal_vec = case_when(
+    Shared > 0.5 ~ "Shared",
+    WB > 0.5 ~ "White British",
+    BB > 0.5 ~ "Black British",
+    TRUE ~ "None"
+  ))%>%pull(Signal_vec)
+
+MESuSiE_plot_data<-data.frame(SNP=paste0("SNP",seq(1,6,1)),PIP=MESuSiE_res$pip,Signal =Signal_vec )
+MESuSiE_plot_data$Signal<-factor(MESuSiE_plot_data$Signal,levels = c("White British","Black British","Shared","Either","None"))
+
+MESuSiE_plot<-ggplot(MESuSiE_plot_data,aes(x=SNP,y=PIP,fill=Signal,shape = Signal))+theme_bw()+geom_point(size =3)+
+  scale_fill_manual("Signal",values=c("White British"="#F2C1B6","Black British"="#ABDB9F","Shared" = "#6162B0","Either" = "#DB6C79","None"="gray"),drop = FALSE)+
+  scale_shape_manual("Signal",values=c("White British"=24,"Black British" = 25,"Shared" = 23,"Either" = 22,"None"=20),drop = FALSE)+
+  scale_y_continuous(limits=c(0, 1.1)) +geom_hline(yintercept=0.5, linetype="dashed")+
+  labs(x="MESuSiE",y="PIP")                                                                                                                                                                                                                                                                           
+MESuSiE_plot<-MESuSiE_plot+custom_theme()
+
+#############################################################
+#					SuSie WB
+#############################################################
+library(ggplot2)
+library(cowplot)
+
+SuSiE_pip<-data.frame(WB = susie_WB$pip, BB = susie_BB$pip)
+colnames(SuSiE_pip)<-c("WB","BB")
+
+Signal_vec <- SuSiE_pip %>%
+  mutate(Signal_vec = case_when(
+    WB > 0.5 & BB < 0.5 ~ "White British",
+    BB > 0.5 & WB > 0.5~ "Shared",
+    TRUE ~ "None"
+  ))%>%pull(Signal_vec)
+
+SuSiE_WB_data<-data.frame(SNP=paste0("SNP",seq(1,6,1)),PIP= susie_WB$pip,Signal =Signal_vec )
+SuSiE_WB_data$Signal<-factor(SuSiE_WB_data$Signal,levels =  c("White British","Black British","Shared","Either","None"))
+
+SuSiE_WB_plot<-ggplot(SuSiE_WB_data,aes(x=SNP,y=PIP,fill=Signal,shape = Signal))+theme_bw()+geom_point(size =3)+
+  scale_fill_manual("Signal",values=c("White British"="#F2C1B6","Black British"="#ABDB9F","Shared" = "#6162B0","Either" = "#DB6C79","None"="gray"),drop = FALSE)+
+  scale_shape_manual("Signal",values=c("White British"=24,"Black British" = 25,"Shared" = 23,"Either" = 22,"None"=20),drop = FALSE)+
+  scale_y_continuous(limits=c(0, 1.1)) +geom_hline(yintercept=0.5, linetype="dashed")+
+  labs(x="SuSiE White British",y="PIP")                                                                                                                                                                                                                                                                           
+SuSiE_WB_plot<-SuSiE_WB_plot+custom_theme()
+#############################################################
+#					SuSie BB
+###############################################################
+Signal_vec <- SuSiE_pip %>%
+  mutate(Signal_vec = case_when(
+    WB < 0.5 & BB > 0.5 ~ "Black British",
+    BB > 0.5 & WB > 0.5~ "Shared",
+    TRUE ~ "None"
+  ))%>%pull(Signal_vec)
+SuSiE_BB_data<-data.frame(SNP=paste0("SNP",seq(1,6,1)),PIP= susie_BB$pip,Signal =Signal_vec )
+SuSiE_BB_data$Signal<-factor(SuSiE_BB_data$Signal,levels = c("White British","Black British","Shared","Either","None"))
+
+SuSiE_BB_plot<-ggplot(SuSiE_BB_data,aes(x=SNP,y=PIP,fill=Signal,shape = Signal))+theme_bw()+geom_point(size =3)+
+  scale_fill_manual("Signal",values=c("White British"="#F2C1B6","Black British"="#ABDB9F","Shared" = "#6162B0","Either" = "#DB6C79","None"="gray"),drop = FALSE)+
+  scale_shape_manual("Signal",values=c("White British"=24,"Black British" = 25,"Shared" = 23,"Either" = 22,"None"=20),drop = FALSE)+
+    scale_y_continuous(limits=c(0, 1.1)) +geom_hline(yintercept=0.5, linetype="dashed")+
+  labs(x="SuSiE Black British",y="PIP")                                                                                                                                                                                                                                                                           
+SuSiE_BB_plot<-SuSiE_BB_plot+custom_theme()
+#############################################################
+#				Paintor
+#############################################################
+
+Paintor_pip<-data.frame( paintor_res$Posterior_Prob)
+colnames(Paintor_pip)<-c("Either")
+
+Signal_vec <- Paintor_pip %>%
+  mutate(Signal_vec = case_when(
+    Either > 0.5 ~ "Either",
+    TRUE ~ "None"
+  ))%>%pull(Signal_vec)
+
+Paintor_plot_data<-data.frame(SNP=paste0("SNP",seq(1,6,1)),PIP=Paintor_pip$Either,Signal =Signal_vec )
+Paintor_plot_data$Signal<-factor(Paintor_plot_data$Signal,levels =  c("White British","Black British","Shared","Either","None"))
+
+Paintor_plot<-ggplot(Paintor_plot_data,aes(x=SNP,y=PIP,fill=Signal,shape = Signal))+theme_bw()+geom_point(size =3)+
+  scale_fill_manual("Signal",values=c("White British"="#F2C1B6","Black British"="#ABDB9F","Shared" = "#6162B0","Either" = "#DB6C79","None"="gray"),drop = FALSE)+
+  scale_shape_manual("Signal",values=c("White British"=24,"Black British" = 25,"Shared" = 23,"Either" = 22,"None"=20),drop = FALSE)+
+  scale_y_continuous(limits=c(0, 1.1)) +geom_hline(yintercept=0.5, linetype="dashed")+
+  labs(x="Paintor",y="PIP")                                                                                                                                                                                                                                                                           
+Paintor_plot<-Paintor_plot+custom_theme()
+
+library(ggpubr)
+beta_gwas_test<-ggarrange(bar_WB,bar_BB,ncol=2,nrow=1)
+locuszoom_test<-ggarrange(locuszoom_WB,locuszoom_BB,ncol=2,nrow=1)
+LD_test<-ggarrange(WB_cor,BB_cor,ncol=2,nrow=1)
+labeled_plot<-ggarrange(beta_gwas_test, locuszoom_test, LD_test,labels = c("a", "b", "c") ,font.label=list(color="black",size=7), nrow=3, ncol=1)
+pip_plot<-ggarrange(SuSiE_WB_plot,SuSiE_BB_plot,MESuSiE_plot,Paintor_plot,ncol=2,nrow = 2 ,common.legend = TRUE, legend="bottom")
+pip_plot<-ggarrange(pip_plot, labels = c("d"),font.label=list(color="black",size=7))
+Fig_1<-ggarrange(labeled_plot,pip_plot,ncol=2,widths=c(4.5,5.5))
+Fig_1
+```
+

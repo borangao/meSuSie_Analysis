@@ -1,0 +1,173 @@
+---
+title: "Simulation"
+author: "borangao"
+date: "2023-10-09"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Baseline Setting 50% Shared Causal SNP
+
+## Feature of 95% credible set
+```{r,message=FALSE,warning=FALSE}
+library(ggplot2)
+library(ggrepel)
+library(grid)
+library(egg)
+library(dplyr)
+library(forcats)
+library(gridExtra)
+library(patchwork)
+library(ggpattern)
+library(data.table)
+library(ggpubr)
+source("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Simulation/091223/code/Function/utility.R")
+###################
+#
+#Set Size & Power
+#
+###################
+load("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Simulation/091223/res_summary/shared_50_baseline.RData")   
+upper_limit<-round(all_Set_data_dataframe%>%filter(Method == "Paintor",causal_num=="Num~Causal  == 5 ",h2=="~h^2 == 10^-4")%>%summarise(upper = quantile(Size,0.75))%>%pull(upper))+50
+p_size_box<-Set_Size_fun(all_Set_data_dataframe%>%mutate(Size = log2(Size+1)),upper_limit = log2(upper_limit))
+p_size_box<-p_size_box+ ylab("log2(Set Size + 1)")
+
+p_power_bar<-Set_Power_fun(set_power_summary)
+size_power<-p_size_box/p_power_bar+plot_annotation(tag_levels = 'a')& 
+  theme(plot.tag = element_text(size = 7,face="bold"))
+size_power
+```
+
+## PIP of signal in at least one ancestry
+```{r,message=FALSE,warning=FALSE,fig.height= 9}
+##########################################################
+#
+#             Either ancestry 
+#  PR curve | FDR Power | Calibration
+#
+##########################################################
+
+      ###################
+      #
+      #ROC
+      #
+      ###################
+      either_all_ROC_data_dataframe<-either_all_ROC_data_dataframe%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"))
+      p_ROC_Either<-ROC_shared_fun(either_all_ROC_data_dataframe)
+       ###################
+      #
+      #FDR&Power
+      #
+      ###################
+      power_upper_limit<-FDR_Power_either%>%filter(FDR!=0.5)%>%ungroup(Method,h2,causal_num)%>%summarise(upper_limit = min(ceiling(max(Power)*10)/10+0.1,1))%>%pull(upper_limit)
+      p_FDR_Power_Either<-FDR_Power_shared_fun(FDR_Power_either%>%filter(FDR!=0.5))+ylim(0,power_upper_limit)
+      ####################
+      #
+      #PIP calibration
+      #
+      ####################
+      PIP_calibration_either_byh2<-create_obs_frq_byh2(data_all%>%select(Signal,h2,MESuSiE_Either,SuSiE_Either, Paintor_PIP),c(1,2,3),c("MESuSiE_Either","SuSiE_Either","Paintor_PIP"))
+      PIP_calibration_either_byh2<- PIP_calibration_either_byh2%>%mutate(Method = fct_recode(Method, "MESuSiE" = "MESuSiE_Either","SuSiE" = "SuSiE_Either","Paintor" = "Paintor_PIP"))%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"))
+      
+      p_calibration_byh2<-PIP_calibration_shared_byh2_fun(PIP_calibration_either_byh2)
+      
+      ROC_FDR_Power_Calibration_Either_Plot<-ggarrange(p_ROC_Either,p_FDR_Power_Either,p_calibration_byh2,nrow = 3,ncol=1,
+                                                       common.legend = TRUE, legend="bottom",labels = c("a","b","c"),font.label=list(color="black",size=7))
+      
+ROC_FDR_Power_Calibration_Either_Plot
+```
+
+## PIP of shared signal 
+```{r,message=FALSE,warning=FALSE,fig.height= 9}
+##########################################################
+#
+#             Shared Signal
+#  PR curve | FDR Power | Calibration
+#
+##########################################################
+      ###################
+      #
+      #ROC
+      #
+      ###################
+      shared_all_ROC_data_dataframe<-shared_all_ROC_data_dataframe%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"))
+      p_ROC_shared<-ROC_shared_fun(shared_all_ROC_data_dataframe)
+      ###################
+      #
+      #FDR&Power
+      #
+      ###################
+       
+      power_upper_limit<-FDR_Power_shared%>%filter(FDR!=0.5)%>%ungroup(Method,h2,causal_num)%>%summarise(upper_limit = min(ceiling(max(Power)*10)/10+0.1,1))%>%pull(upper_limit)
+      p_FDR_Power_shared<-FDR_Power_shared_fun(FDR_Power_shared%>%filter(FDR!=0.5))+ylim(0,power_upper_limit)
+      
+       ####################
+      #
+      #PIP calibration
+      #
+      ####################
+      
+      PIP_calibration_shared_byh2<-create_obs_frq_byh2(data_all%>%select(Signal,h2,MESuSiE_Shared,SuSiE_Shared, Paintor_PIP),c(3),c("MESuSiE_Shared","SuSiE_Shared","Paintor_PIP"))
+      PIP_calibration_shared_byh2<- PIP_calibration_shared_byh2%>%mutate(Method = fct_recode(Method, "MESuSiE" = "MESuSiE_Shared","SuSiE" = "SuSiE_Shared","Paintor" = "Paintor_PIP"))%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"))
+      
+      p_calibration_shared_byh2<-PIP_calibration_shared_byh2_fun(PIP_calibration_shared_byh2)
+      
+      ROC_FDR_Power_Calibration_shared_Plot<-ggarrange(p_ROC_shared,p_FDR_Power_shared,p_calibration_shared_byh2,nrow = 3,ncol=1,common.legend = TRUE, legend="bottom",labels = c("a","b","c"),font.label=list(color="black",size=7))
+    ROC_FDR_Power_Calibration_shared_Plot 
+```
+
+## PIP of ancestry-specific signal
+```{r,message=FALSE,warning=FALSE}      
+##########################################################
+#
+# Ancestry-specific Signal 
+#  ROC | FDR Power | PIP calibration  
+#
+##########################################################
+      ###################
+      #
+      #ROC
+      #
+      ###################
+     
+      ancestry_all_ROC_data_dataframe <- ancestry_all_ROC_data_dataframe %>% 
+        mutate(Method = as.character(Method))
+      split_list <- strsplit(ancestry_all_ROC_data_dataframe %>% pull(Method), " +")
+      ancestry_all_ROC_data_dataframe <- ancestry_all_ROC_data_dataframe %>%mutate(
+          Method = sapply(split_list, `[`, 1),
+          Ancestry = sapply(split_list, `[`, 2)
+        )%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"),Ancestry = fct_relevel(Ancestry, "WB","BB"))%>%mutate(Ancestry = fct_recode(Ancestry, "White British" = "WB"   , "Black British" = "BB" ))
+      p_ROC_ancestry<-ROC_ancestry_fun(ancestry_all_ROC_data_dataframe)
+  
+      ###################
+      #
+      #FDR&Power
+      #
+      ###################
+      FDR_Power_ancestry <- FDR_Power_ancestry %>% mutate(Method = as.character(Method))
+      split_list <- strsplit(FDR_Power_ancestry %>% pull(Method), " +")
+      FDR_Power_ancestry <- FDR_Power_ancestry%>%ungroup(h2,causal_num,Method) %>%mutate(
+        Method = sapply(split_list, `[`, 1),
+        Ancestry = sapply(split_list, `[`, 2)
+      )%>%mutate(Method = fct_relevel(Method,"MESuSiE","SuSiE","Paintor"),Ancestry = fct_relevel(Ancestry, "WB","BB"))%>%mutate(Ancestry = fct_recode(Ancestry, "White British" = "WB"   , "Black British" = "BB" ))
+      
+      power_upper_limit<-FDR_Power_ancestry%>%filter(FDR!=0.5)%>%summarise(upper_limit = min(ceiling(max(Power)*10)/10+0.1,1))%>%pull(upper_limit)
+      
+       p_FDR_Power_ancestry<-FDR_Power_ancestry_fun(FDR_Power_ancestry%>%filter(FDR!=0.5))+ylim(0, power_upper_limit)
+       ROC_FDR_Power_ancestry<- (p_ROC_ancestry / p_FDR_Power_ancestry) +plot_annotation(tag_levels = 'a')&theme(plot.tag = element_text(size = 7, face = "bold"))
+       ROC_FDR_Power_ancestry<-ROC_FDR_Power_ancestry+ plot_layout(heights = c(1, 1))
+        ROC_FDR_Power_ancestry
+      ####################
+      #
+      #PIP calibration
+      #
+      ###################   
+         
+       PIP_calibration_ancestry<- PIP_calibration_ancestry%>%group_by(causal_num)%>%mutate(Method = fct_recode(Method, "MESuSiE White British" = "MESuSiE~WB", "MESuSiE Black British" = "MESuSiE~BB", "Paintor White British" = "Paintor~WB","Paintor Black British" = "Paintor~BB"))
+       levels(PIP_calibration_ancestry$Method)<-c(paste0("MESuSiE~","White~","British"),paste0("MESuSiE~","Black~","British"),paste0("Paintor~","White~","British"),paste0("Paintor~","Black~","British"))
+       p_calibration_ancestry<-PIP_calibration_ancestry_fun(PIP_calibration_ancestry)
+
+       p_calibration_ancestry
+```
+

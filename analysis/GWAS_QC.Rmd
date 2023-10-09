@@ -1,0 +1,198 @@
+---
+title: "Data Preparation"
+author: "borangao"
+date: "2023-10-07"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Data Preparation for Multiple-Ancestry Fine-Mapping
+
+> **Note:** Following this guideline will help maintain the integrity and accuracy of the fine-mapping process across multiple ancestries.
+
+## Step-by-Step Guideline
+
+We used GWAS summary statistics of HDL on chromosome 22 from UKBB and GLGC for illustration purposes.
+
+### 1. GWAS Preparations:
+
+-   **Uniform QC:** Apply a uniform QC process for each individual ancestry.
+
+We recommend filtering strand-ambiguous SNPs, multi-allelic SNPs, SNPs in MHC regions, and those with MAF \< 0.001. The `GWAS_QC` function requires summary data of CHR, POS, CHR_POS, REF, ALT, MAF, BETA, and SE. Users can specify a MAF threshold to pass into the function.
+
+```{r, message=FALSE, warning=FALSE,tidy = TRUE}
+  library(MESuSiE)
+  library(data.table)
+  library(dplyr)
+  library(snpStats)
+
+  setwd("/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/")
+  UKBB <- fread("data/UKBB_chr_22.txt")
+  GLGC <- fread("data/GLGC_chr_22.txt")
+  UKBB <- GWAS_QC(UKBB, 0.001)
+  GLGC <- GWAS_QC(GLGC, 0.001)
+```
+
+-   **Subset of SNPs:** Start with a consistent subset of SNPs from various ancestries.
+
+Here we use `find_common_snps` to subset a common set of SNPs across ancestries. We matched up by CHR_POS and also check the reference and alternative allele are matched up together
+
+```{r, message=FALSE, warning=FALSE,tidy = TRUE}
+  common_SNP<-find_common_snps(UKBB,GLGC)
+  UKBB_subset<-UKBB%>%filter(CHR_POS%in%common_SNP)%>%arrange(match(CHR_POS, common_SNP))
+  GLGC_subset<-GLGC%>%filter(CHR_POS%in%common_SNP)%>%arrange(match(CHR_POS, common_SNP))
+```
+
+-   **Identify Variation & Adjust BETA & Z Score:** Identify variation in reference alleles across ancestries, and adjust the sign of the BETA and Z score.
+
+Here we use `allele_flip` to match up the GLGC reference allele with UKBB reference allele. The beta effect size is flipped if there is a reference allele difference.
+
+```{r, message=FALSE, warning=FALSE,tidy = TRUE}
+  GLGC_subset_flip<-allele_flip(UKBB_subset,GLGC_subset)
+```
+
+### 2. Reference Panel Prepation:
+
+-   **Subset SNPs:** Subset to a shared group of SNPs across ancestries and matched up with GWAS.
+
+```{r, message=FALSE, warning=FALSE,tidy = TRUE}
+  #Read in the bim file of both ancestries
+  WB_bim<-fread("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/QC_function_data/WB/chr_filter_22.bim")
+  BB_bim<-fread("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/QC_function_data/BB/chr_filter_22.bim")
+  WB_bim<-WB_bim%>%rename(CHR = V1, POS = V4,REF = V6, ALT = V5)%>%mutate(CHR_POS = paste0(CHR,"_",POS))
+  BB_bim<-BB_bim%>%rename(CHR = V1, POS = V4,REF = V6, ALT = V5)%>%mutate(CHR_POS = paste0(CHR,"_",POS))
+  
+  #Do QC
+  WB_bim<-GWAS_QC(WB_bim,0.001) #Note GWAS_QC works if no MAF is provided
+  BB_bim<-GWAS_QC(BB_bim,0.001)
+  
+  #Find a common set of the SNPs across ancestries
+  common_SNP_bim<-find_common_snps(WB_bim,BB_bim)
+  WB_bim_subset<-WB_bim%>%filter(CHR_POS%in%common_SNP_bim)
+  
+  #Find a common set of the SNPs with GWAS summary statistics
+  common_SNP_GWAS<-find_common_snps(UKBB_subset,WB_bim_subset)
+  UKBB_used<-UKBB_subset%>%filter(CHR_POS%in%common_SNP_GWAS)%>%arrange(match(CHR_POS, common_SNP_GWAS))
+  GLGC_used<-GLGC_subset_flip%>%filter(CHR_POS%in%common_SNP_GWAS)%>%arrange(match(CHR_POS, common_SNP_GWAS))
+```
+
+-   **Flip Alleles:** Flip alleles if needed to achieve consistency.
+
+```{r, message = FALSE, warning = FALSE,tidy = TRUE}
+  REF_Allele = data.frame (SNP = WB_bim_subset%>%filter(CHR_POS%in%common_SNP)%>%arrange(match(CHR_POS, common_SNP))%>%pull(V2), REF = UKBB_used%>%pull(REF))
+  geno_dir<- "/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/QC_function_data/"
+  REF_Allele_name <- paste0(geno_dir,"WB/REF_Allele.txt")
+  write.table(REF_Allele,REF_Allele_name,col.names = F,row.names = F,quote = F)
+  system(paste0("~/software/plink2 --bfile ",geno_dir,"/WB/chr_filter_22 --ref-allele ", REF_Allele_name  ," 2 1 --make-bed --out  ",geno_dir,"/WB/chr_used_22"))
+    system(paste0("~/software/plink2 --bfile ",geno_dir,"/BB/chr_filter_22 --ref-allele ", REF_Allele_name  ," 2 1 --make-bed --out  ",geno_dir,"/BB/chr_used_22"))
+```
+
+### 3. Check for LD Mismatches:
+
+We focus on the region from 21917190 to 22482774 bp to check the LD mismatch
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+min_POS = 21917190
+max_POS = 22482774
+UKBB_example <- UKBB_used%>%filter(POS>=min_POS, POS<=max_POS)
+GLGC_example <- GLGC_used%>%filter(POS>=min_POS, POS<=max_POS)
+SNPs_in_region <-WB_bim_subset%>%filter(CHR_POS%in%UKBB_example$CHR_POS)%>%arrange(match(CHR_POS, UKBB_example$CHR_POS))%>%pull(V2)
+
+create_correlation_matrix <- function(geno_name, SNPs_in_region) {
+  # Read in the genotype file selecting only the SNPs in the specified region
+  geno_data <- read.plink(paste0(geno_name, ".bed"), select.snps = SNPs_in_region)
+  
+  # Convert genotypes to numeric and match them with SNPs_in_region
+  plink_geno <- as(geno_data$genotypes, "numeric")
+  plink_geno <- plink_geno[, match(SNPs_in_region, geno_data$map$snp.name)]
+  
+  # Replace NA values with the mean of the respective column (ignoring NA values)
+  plink_geno <- apply(plink_geno, 2, function(x) {
+    x[is.na(x)] <- mean(x, na.rm = TRUE)
+    return(x)
+  })
+  
+  # Calculate the correlation matrix
+  cov <- cov2cor(crossprod(scale(plink_geno)))
+  
+  return(cov)
+}
+
+# Generate correlation matrices for WB and BB genotype datasets
+WB_cov <- create_correlation_matrix(paste0(geno_dir,"WB/chr_used_22"), SNPs_in_region)
+BB_cov <- create_correlation_matrix(paste0(geno_dir,"BB/chr_used_22"), SNPs_in_region)
+```
+
+-   **Use `kriging_rss` Function:** We adapted function of `kriging_rss` function from SuSiE for LD mismatch variant detection
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+WB_diagnostic<-kriging_rss(UKBB_example$Z,WB_cov)
+BB_diagnostic<-kriging_rss(GLGC_example$Z,BB_cov)
+```
+
+-   **Inspect LD Discrepancies:** Inspect each ancestry for LD discrepancies.
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+WB_diagnostic$plot
+BB_diagnostic$plot
+```
+
+We see SNPs are more close to the line in UKBB and noisy in GLGC as we use in-sample LD for UKBB, and external LD for GLGC.
+
+#### Observations & Recommendations:
+
+-   **LD Mismatch Indicators:** SNPs that deviate most from the diagonal in the plots above suggest mismatches. It's recommended, per [SuSiE](https://stephenslab.github.io/susieR/) guidelines (Wang et al., JRSSB 2020), to identify LD mismatched SNPs that meet these criteria:
+
+    -   A logLR test value greater than 2.
+    -   An absolute Z-value above 2.
+
+-   **Marginally Non-significant SNPs:** In addition to SuSiE guideline, we also found that SNPs with an absolute Z-value less than 2. If they also:
+
+    -   Have a abs(z_std_diff) greater than 3.
+    -   Show a high correlation (absolute r-value greater than 0.8) with GWAS signals.
+
+    They should be treated as LD mismatch SNPs. Such mismatches can obstruct the IBSS algorithm's functionality, causing the simultaneous selection of a GWAS signal and its highly correlated non-signal. Specifically, when the IBSS algorithm selects a GWAS signal, the non-signal is assigned a significant effect, which can result in the non-signal being chosen with an opposite effect in subsequent iterations.
+
+-   **Data Observations in UKBB V2:** In the UKBB V2 dataset, we noticed mismatches where SNPs imputed using the 1000G panel sometimes had incorrect genomic positions.
+
+-   **Data Observations in Meta-analysis:** The similar pattern is observed when a SNP is highly correlated with a GWAS signal, while the sample size as well as Z score of the SNP is extremely small due to the platform difference between analysis.
+
+-   **Recommendation:** We urge users to employ the most recent UKBB genotype datasets. Always check for LD mismatches before initiating fine-mapping to ensure accurate results. Remove the mismatched SNP from the analysis if needed. There are also alternative software tools available for detecting LD mismatches, such as [SLALOM](https://github.com/mkanai/slalom) (Kanai et al., Cell Genomics 2022), [DENTIST](https://doi.org/10.5281/zenodo.5516202) (Chen et al., NC 2021).
+
+### 4. Proof of concept:
+
+-   **Create mismatch GWAS data:** Set one of the GWAS signal Z-score to 0.
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+which(abs(UKBB_example$Z)>10)
+min(WB_cov[which(abs(UKBB_example$Z)>10),which(abs(UKBB_example$Z)>10)])
+
+##We create a hypothetical GWAS by setting one of the SNP effect size being zero
+UKBB_example_mismatch<-UKBB_example
+UKBB_example_mismatch$Z[2] = 0
+```
+
+-   **LD mismatch is detected:**
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+WB_diagnostic_mismatch<-kriging_rss(UKBB_example_mismatch$Z,WB_cov)
+WB_diagnostic_mismatch$plot
+WB_diagnostic_mismatch$conditional_dist[2,]
+```
+
+Note logLR = 0, Z-score = 0. The kriging_rss of SuSiE will not report this SNP.
+
+-   **SuSiE with and without LD mismatch:**
+
+```{r,message=FALSE, warning=FALSE,tidy = TRUE}
+library(susieR)
+susie_WB<-susie_rss(UKBB_example$Z,WB_cov,check_prior = FALSE)
+susie_WB$sets
+susie_WB_mismatch<-susie_rss(UKBB_example_mismatch$Z,WB_cov,check_prior = FALSE)
+susie_WB_mismatch$sets
+save(UKBB_example,GLGC_example,WB_cov,BB_cov,file = "/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/data/MESuSiE_Example.RData")
+```
+
+The credible set detected by SuSiE contains 50 highly correlated SNP, which is expected. However, we see 3 different SNPs detected as causal SNP when there is a LD mismatch.
+
