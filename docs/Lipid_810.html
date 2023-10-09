@@ -11,9 +11,9 @@
 
 <meta name="author" content="borangao" />
 
-<meta name="date" content="2022-11-09" />
+<meta name="date" content="2023-10-09" />
 
-<title>Installation and Motivating Example</title>
+<title>Lipid_810</title>
 
 <script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -380,9 +380,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Installation and Motivating Example</h1>
+<h1 class="title toc-ignore">Lipid_810</h1>
 <h4 class="author">borangao</h4>
-<h4 class="date">2022-11-09</h4>
+<h4 class="date">2023-10-09</h4>
 
 </div>
 
@@ -601,9 +601,9 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/installation.Rmd</code>) and HTML
-(<code>docs/installation.html</code>) files. If you’ve configured a
-remote Git repository (see <code>?wflow_git_remote</code>), click on the
+made to the R Markdown (<code>analysis/Lipid_810.Rmd</code>) and HTML
+(<code>docs/Lipid_810.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
 hyperlinks in the table below to view the files as they were in that
 past version.
 </p>
@@ -634,7 +634,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/installation.Rmd" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/Lipid_810.Rmd" target="_blank">62ce4b3</a>
 </td>
 <td>
 borangao
@@ -646,57 +646,6 @@ borangao
 Update my analysis
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/10cb2675fd78d87eba45962277bae630c1286202/docs/installation.html" target="_blank">10cb267</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/analysis/installation.Rmd" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/installation.html" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -704,214 +653,221 @@ Build site.
 </div>
 </div>
 </div>
-<div id="installation-of-mesusie" class="section level1">
-<h1>Installation of MESuSiE</h1>
-<pre class="r"><code>library(devtools)
-# Install MESuSiE
-install_github(&quot;borangao/MESuSiE&quot;,dependencies = FALSE)
-# Load MESuSiE
-library(MESuSiE)</code></pre>
+<div id="regions-of-4-lipid-traits" class="section level1">
+<h1>810 Regions of 4 lipid traits</h1>
+<blockquote>
+<p><strong>Note</strong>: all the code and analysis reproduced here can
+be found in <a href="https://zenodo.org/deposit/8411004#">Zenodo</a></p>
+</blockquote>
+<p>This analysis is done by relaxing the P-value threshold when
+constructing candidate regions.</p>
+<div id="feature-of-95-credible-set" class="section level2">
+<h2>Feature of 95% credible set</h2>
+<div id="a.-set-size-and-eqtl-enrichment-of-95-credible-set"
+class="section level3">
+<h3>a. Set size and eQTL enrichment of 95% credible set</h3>
+<pre class="r"><code>library(ggpubr)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(ggpmisc)
+library(VennDiagram)
+library(gridExtra)
+library(ggbreak)
+library(DescTools)
+library(coin)
+library(susieR)
+library(ggrepel)
+library(stringr)
+
+
+load(&quot;/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/01_07_Real_Data/summary_res/res.RData&quot;)
+
+#####################################################################
+#
+#     Plot directory and theme
+#
+####################################################################
+plot_dir&lt;-&quot;/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Real_Data/Lipid_810/Figure/&quot;
+system(paste0(&quot;mkdir -p &quot;,plot_dir))
+custom_theme &lt;- function() {
+  theme(
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 5),  
+    axis.title.x = element_text(size = 7, face=&quot;bold&quot;),
+    axis.title.y = element_text(size = 7, face=&quot;bold&quot;),
+    strip.text.x = element_text(size = 5),
+    strip.text.y = element_text(size = 5),
+    strip.background = element_blank(),
+    legend.text = element_text(size=7),
+    legend.title = element_text(size=7, face=&quot;bold&quot;),
+    plot.title = element_text(size=7, hjust = 0.5),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(), 
+    axis.line = element_line(color = &quot;black&quot;)
+  )
+}
+################################################
+#
+#       Set Size/Z-score/eQTL 
+#
+#
+###############################################
+################################################
+#
+#       Set SiZe Part
+#
+###############################################     
+###Median set size by Trait
+all_sets_info&lt;-data.frame(res_all%&gt;%group_by(Trait,Region) %&gt;% summarise(across(c(&quot;MESuSiE_cs&quot;, &quot;SuSiE_cs&quot;,&quot;Paintor_cs&quot;), ~ sum(.x, na.rm = TRUE))))%&gt;%filter(MESuSiE_cs!=0, SuSiE_cs!=0, Paintor_cs!=0) ###Median Set Size across all locus
+all_sets_info_long&lt;-all_sets_info%&gt;%pivot_longer(!(Trait|Region), names_to = &quot;Method&quot;, values_to = &quot;Count&quot;)
+all_sets_info_long$Method&lt;-factor(all_sets_info_long$Method,levels=c(&quot;MESuSiE_cs&quot;,&quot;SuSiE_cs&quot;,&quot;Paintor_cs&quot;))
+levels(all_sets_info_long$Method)&lt;-c(&quot;MESuSiE&quot;,&quot;SuSiE&quot;,&quot;Paintor&quot;)
+
+p_set = ggplot(data =all_sets_info_long,aes(x = Trait, y=Count,fill=Method))+geom_boxplot(aes(x = Trait,fill=Method),outlier.size = 0.1,fatten = 0.5,color = &quot;darkgray&quot;)+scale_fill_manual(values=c(&quot;MESuSiE&quot;=&quot;#023e8a&quot;,&quot;SuSiE&quot;=&quot;#2a9d8f&quot;,&quot;Paintor&quot;=&quot;#f4a261&quot;),guide=FALSE)
+p_set =p_set + theme_bw() + xlab(&quot;&quot;) +ylab(&quot;Set Size&quot;)+coord_cartesian(ylim=c(0,175))
+p_set= p_set+custom_theme()
+
+################################################
+#
+#       Z-score Part
+#
+###############################################     
+MESuSiE_cs_Z&lt;-res_all%&gt;%group_by(Trait) %&gt;%filter(MESuSiE_cs==1)%&gt;%summarise(zmax = median(pmax(abs(zscore_WB),abs(zscore_BB))))
+SuSiE_cs_Z&lt;-res_all%&gt;%group_by(Trait) %&gt;%filter(SuSiE_cs==1)%&gt;%summarise(zmax =median(pmax(abs(zscore_WB),abs(zscore_BB))))%&gt;%pull(zmax)
+Paintor_cs_Z&lt;-res_all%&gt;%group_by(Trait) %&gt;%filter(Paintor_cs==1)%&gt;%summarise(zmax = median(pmax(abs(zscore_WB),abs(zscore_BB))))%&gt;%pull(zmax)
+set_size_z_info&lt;-data.frame(cbind(MESuSiE_cs_Z,SuSiE_cs_Z,Paintor_cs_Z))
+colnames(set_size_z_info)&lt;-c(&quot;Trait&quot;,c(&quot;MESuSiE&quot;,&quot;SuSiE&quot;,&quot;Paintor&quot;))
+set_size_z_info_long&lt;-set_size_z_info %&gt;%pivot_longer(!(Trait), names_to = &quot;Method&quot;, values_to = &quot;Z&quot;)%&gt;%mutate(Method = factor(Method, levels=c(&quot;MESuSiE&quot;,&quot;SuSiE&quot;,&quot;Paintor&quot;)))
+
+p_z = ggplot(data = set_size_z_info_long,aes(x = Trait, y=Z,fill=Method))+geom_bar( stat = &quot;identity&quot;,position=&quot;dodge&quot;)+scale_fill_manual(values=c(&quot;MESuSiE&quot;=&quot;#023e8a&quot;,&quot;SuSiE&quot;=&quot;#2a9d8f&quot;,&quot;Paintor&quot;=&quot;#f4a261&quot;))
+p_z = p_z + geom_text(label = round(set_size_z_info_long$Z,2),position = position_dodge(width = 1),vjust=-0.5,size = 5*5/14)
+p_z = p_z + theme_bw() + xlab(&quot;&quot;) +ylab(&quot;Median |Z|&quot;)+ ylim(0,max(round(set_size_z_info_long$Z,2)+1))
+p_z = p_z +custom_theme()
+################################################
+#
+#       eQTL enrichment 
+#
+#
+############################################### 
+  ann_col_name&lt;-c(&quot;missense&quot;, &quot;synonymous&quot;, &quot;utr_comb&quot;, &quot;promotor&quot;, &quot;CRE&quot;,&quot;liver_ind_eQTL&quot;)
+  # Functions for calculating fold enrichment
+  calc_fold_enrichment &lt;- function(df, cs_col, ann_col_name) {
+    df %&gt;%
+      group_by(Region) %&gt;%
+      filter(sum(!!sym(cs_col)) != 0) %&gt;%
+      group_by(Trait, !!sym(cs_col)) %&gt;%
+      summarise(across(ann_col_name, ~ sum(.x, na.rm = TRUE) / n())) %&gt;%
+      group_by(Trait) %&gt;%
+      summarise(across(ann_col_name, ~ .x[!!sym(cs_col) == 1] / .x[!!sym(cs_col) == 0]))
+  }
+  res_all&lt;-res_all%&gt;%mutate(utr_comb = ifelse((utr_5+utr_3)!=0,1,0))
+  MESuSiE_PIP_ann &lt;- calc_fold_enrichment(res_all, &quot;MESuSiE_cs&quot;, ann_col_name)
+  SuSiE_PIP_ann &lt;- calc_fold_enrichment(res_all, &quot;SuSiE_cs&quot;, ann_col_name)
+  Paintor_PIP_ann &lt;- calc_fold_enrichment(res_all, &quot;Paintor_cs&quot;, ann_col_name)
+  # Combine results
+  Trait_CS_enrichment &lt;- bind_rows(
+    MESuSiE_PIP_ann %&gt;% mutate(Method = &quot;MESuSiE&quot;),
+    SuSiE_PIP_ann %&gt;% mutate(Method = &quot;SuSiE&quot;),
+    Paintor_PIP_ann %&gt;% mutate(Method = &quot;Paintor&quot;)
+  ) %&gt;% mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;)))%&gt;%
+    dplyr::select(Trait,liver_ind_eQTL ,Method )%&gt;%dplyr::rename(eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  Trait_CS_enrichment_long &lt;- Trait_CS_enrichment %&gt;%
+    pivot_longer(cols = -c(Method, Trait), names_to = &quot;Cat&quot;, values_to = &quot;Prop&quot;) %&gt;%
+    mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;)))
+
+
+  
+p_eQTL &lt;- ggplot(Trait_CS_enrichment_long, aes(x = Trait, y = Prop, fill = Method)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +scale_fill_manual(values = c(&quot;MESuSiE&quot; = &quot;#023e8a&quot;, &quot;SuSiE&quot; = &quot;#2a9d8f&quot;, &quot;Paintor&quot; = &quot;#f4a261&quot;)) +
+  geom_text(,label = round(Trait_CS_enrichment_long$Prop,2),position = position_dodge(width = 1),vjust=-0.5,size = 5*5/14)+
+  xlab(&quot;&quot;) + ylab(&quot;eQTL Fold Enrichment&quot;) + ylim(0,max(round(Trait_CS_enrichment_long$Prop))+1)+
+  theme_bw() + custom_theme()
+
+p_out&lt;-p_set/p_z/p_eQTL+plot_layout(guides = &quot;collect&quot;,heights = c(1.5,1,1))+plot_annotation(tag_levels = &#39;a&#39;)&amp;theme(legend.position = &#39;bottom&#39;,plot.tag = element_text(size = 7, face = &quot;bold&quot;))
+p_out</code></pre>
+<p><img src="figure/Lipid_810.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="motivating-example" class="section level1">
-<h1>Motivating Example</h1>
-<p>The motivating example is based on a toy dataset outlined in the
-manuscript.</p>
-<div id="data-characteristics" class="section level2">
-<h2>1. Data Characteristics</h2>
-<p>The dataset contains:</p>
-<ul>
-<li>Six SNPs categorized into three distinct LD clusters.</li>
-<li>Within each cluster, the SNPs show strong correlations.</li>
-<li>Between clusters, SNP correlations are weak.</li>
-</ul>
-<div id="snp-grouping" class="section level3">
-<h3>SNP Grouping</h3>
-<ol style="list-style-type: decimal">
-<li><strong>Cluster 1</strong>: Contains SNP 1 and 2.</li>
-<li><strong>Cluster 2</strong>: Contains SNP 3 and 4.</li>
-<li><strong>Cluster 3</strong>: Contains SNP 5 and 6.</li>
-</ol>
-</div>
-<div id="causal-snps" class="section level3">
-<h3>Causal SNPs:</h3>
-<p>Based on our simulations, the SNPs are postulated to have the
-following causal relationships:</p>
-<ul>
-<li><strong>SNP 4</strong>: Simulated as a shared causal SNP across
-ancestries.</li>
-<li><strong>SNP 2</strong>: Simulated as the causal SNP specific to the
-BB ancestry.</li>
-<li><strong>SNP 6</strong>: Simulated as the causal SNP specific to the
-WB ancestry.</li>
-</ul>
-</div>
-</div>
-<div id="input-of-mesusie" class="section level2">
-<h2>2. Input of MESuSiE</h2>
-<p>The data is provided with the package. For the input of the MESuSiE,
-we require a list of summary statistics and a list of LD matrices from
-multiple ancestries.</p>
-<pre class="r"><code>data(summ_stat_list)
-data(LD_list)
-summ_stat_list</code></pre>
-<pre><code>$WB
-           SNP         Beta          Se          Z     N POS
-rs1890449 SNP1 -0.001806456 0.001825742 -0.9894367 3e+05   1
-rs3122053 SNP2 -0.001749892 0.001825742 -0.9584555 3e+05   2
-rs6600259 SNP3  0.019230827 0.001825742 10.5331576 3e+05   3
-rs6681089 SNP4  0.019113531 0.001825742 10.4689120 3e+05   4
-rs3008244 SNP5  0.018599221 0.001825742 10.1872128 3e+05   5
-rs3008245 SNP6  0.018806821 0.001825742 10.3009200 3e+05   6
+<div id="b.-functional-enrichment-of-95-credible-set-and-top-signals"
+class="section level3">
+<h3>b. Functional enrichment of 95% credible set and top signals</h3>
+<pre class="r"><code>################################################################################
+#
+#
+#     Functional Annotation enrichment for 95% credible set SNPS
+#
+#
+################################################################################
+# Enrichment of 95% credible set without by trait
+  calc_fold_enrichment_marginal&lt;-function(df, cs_col, ann_col_name) {
+    df %&gt;%group_by(Region) %&gt;%
+      filter(sum(!!sym(cs_col)) != 0) %&gt;%
+      group_by( !!sym(cs_col)) %&gt;%
+      summarise(across(ann_col_name, ~ sum(.x, na.rm = TRUE) / n())) %&gt;%
+      summarise(across(ann_col_name, ~ .x[!!sym(cs_col) == 1] / .x[!!sym(cs_col) == 0]))
+  }
+  MESuSiE_PIP_ann &lt;- calc_fold_enrichment_marginal(res_all, &quot;MESuSiE_cs&quot;, ann_col_name)
+  SuSiE_PIP_ann &lt;- calc_fold_enrichment_marginal(res_all, &quot;SuSiE_cs&quot;, ann_col_name)
+  Paintor_PIP_ann &lt;- calc_fold_enrichment_marginal(res_all, &quot;Paintor_cs&quot;, ann_col_name)
+  
+  CS_enrichment &lt;- bind_rows(
+    MESuSiE_PIP_ann %&gt;% mutate(Method = &quot;MESuSiE&quot;),
+    SuSiE_PIP_ann %&gt;% mutate(Method = &quot;SuSiE&quot;),
+    Paintor_PIP_ann %&gt;% mutate(Method = &quot;Paintor&quot;)
+  ) %&gt;% mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;)))%&gt;% 
+    dplyr::rename(Missense = missense ,Synonymous = synonymous,UTR = utr_comb,Promotor = promotor,eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  CS_enrichment_long &lt;- CS_enrichment %&gt;%
+    pivot_longer(cols = -c(Method), names_to = &quot;Cat&quot;, values_to = &quot;Prop&quot;) %&gt;%
+    mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;))) %&gt;%
+    mutate(Cat = factor(Cat, levels = c(&quot;Missense&quot;, &quot;Synonymous&quot;, &quot;UTR&quot;, &quot;Promotor&quot;, &quot;CRE&quot;,&quot;eQTL&quot;)))%&gt;%
+    mutate(Prop = round(Prop, 2))
+p_set &lt;- ggplot(data = CS_enrichment_long,aes(x = Cat, y = Prop, fill = Method)) +
+  geom_col(position = &quot;dodge&quot;) + scale_fill_manual(values = c(&quot;MESuSiE&quot; = &quot;#023e8a&quot;, &quot;SuSiE&quot; = &quot;#2a9d8f&quot;, &quot;Paintor&quot; = &quot;#f4a261&quot;)) +
+  geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 5/14*5) + 
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;) + 
+  xlab(&quot;&quot;) + ylab(&quot;Fold Enrichment Credible Set&quot;) +ylim(0,round(max(CS_enrichment_long$Prop))+1) +
+  theme_bw() + custom_theme()
+################################################################################
+#
+#
+#     Functional Annotation enrichment for top 500 PIP SNPs
+#
+#
+################################################################################    
+  # Enrichment of top 500 signal
+  top_N_signal = 500
+  bg_an&lt;-res_all%&gt;%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))
+  MESuSiE_Signal_ann&lt;-res_all%&gt;%filter(MESuSiE_PIP_Shared&gt;0.5|MESuSiE_PIP_WB&gt;0.5|MESuSiE_PIP_BB&gt;0.5)%&gt;% arrange(desc(MESuSiE_PIP_Either))%&gt;%top_n(n = top_N_signal, wt = MESuSiE_PIP_Either)%&gt;%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  SuSiE_Signal_ann&lt;-res_all%&gt;%filter(SuSiE_PIP&gt;0.5)%&gt;% arrange(desc(SuSiE_PIP))%&gt;%top_n(n = top_N_signal, wt = SuSiE_PIP)%&gt;%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  Paintor_Signal_ann&lt;-res_all%&gt;%filter(Paintor_PIP&gt;0.5) %&gt;% arrange(desc(Paintor_PIP))%&gt;%top_n(n = top_N_signal, wt = Paintor_PIP)%&gt;%summarise(across(ann_col_name,~ sum(.x, na.rm = TRUE)/n()))/bg_an
+  
+  Signal_enrichment &lt;- bind_rows(
+    MESuSiE_Signal_ann %&gt;% mutate(Method = &quot;MESuSiE&quot;),
+    SuSiE_Signal_ann %&gt;% mutate(Method = &quot;SuSiE&quot;),
+    Paintor_Signal_ann %&gt;% mutate(Method = &quot;Paintor&quot;)
+  ) %&gt;% mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;)))%&gt;% 
+    dplyr::rename(Missense = missense ,Synonymous = synonymous,UTR = utr_comb,Promotor = promotor,eQTL = liver_ind_eQTL)
+  # Pivot to long format
+  Signal_enrichment_long &lt;- Signal_enrichment %&gt;%
+    pivot_longer(cols = -c(Method), names_to = &quot;Cat&quot;, values_to = &quot;Prop&quot;) %&gt;%
+    mutate(Method = factor(Method, levels = c(&quot;MESuSiE&quot;, &quot;SuSiE&quot;, &quot;Paintor&quot;))) %&gt;%
+    mutate(Cat = factor(Cat, levels = c(&quot;Missense&quot;, &quot;Synonymous&quot;, &quot;UTR&quot;, &quot;Promotor&quot;, &quot;CRE&quot;,&quot;eQTL&quot;)))%&gt;%
+    mutate(Prop = round(Prop, 2))
 
-$BB
-           SNP          Beta          Se          Z     N POS
-rs1890449 SNP1  0.0146503149 0.001825742  8.0243079 3e+05   1
-rs3122053 SNP2  0.0196888866 0.001825742 10.7840473 3e+05   2
-rs6600259 SNP3  0.0176200508 0.001825742  9.6508993 3e+05   3
-rs6681089 SNP4  0.0192921442 0.001825742 10.5667426 3e+05   4
-rs3008244 SNP5 -0.0017014483 0.001825742 -0.9319216 3e+05   5
-rs3008245 SNP6  0.0007568107 0.001825742  0.4145223 3e+05   6</code></pre>
-<p>Each element of the summary statistics list is a data frame of
-summary statistics from each ancestry with column name SNP, Beta, Se, Z,
-and N representing SNP information, marginal effect size, standard
-error, Z-scores and number of sample.</p>
-<pre class="r"><code>LD_list</code></pre>
-<pre><code>$WB
-                  SNP1         SNP2         SNP3         SNP4          SNP5
-rs1890449 1.0000000000 0.9985345076  0.008849574  0.008352736  0.0004252546
-rs3122053 0.9985345076 1.0000000000  0.009187116  0.008718572  0.0006605135
-rs6600259 0.0088495745 0.0091871156  1.000000000  0.992043794 -0.0238684132
-rs6681089 0.0083527360 0.0087185716  0.992043794  1.000000000 -0.0263527244
-rs3008244 0.0004252546 0.0006605135 -0.023868413 -0.026352724  1.0000000000
-rs3008245 0.0005909073 0.0008813672 -0.023679608 -0.025942562  0.9961393233
-                   SNP6
-rs1890449  0.0005909073
-rs3122053  0.0008813672
-rs6600259 -0.0236796083
-rs6681089 -0.0259425621
-rs3008244  0.9961393233
-rs3008245  1.0000000000
-
-$BB
-                  SNP1         SNP2        SNP3       SNP4        SNP5
-rs1890449  1.000000000  0.627749083 0.006781938 0.01153312 -0.02141473
-rs3122053  0.627749083  1.000000000 0.008521627 0.01231062 -0.01548369
-rs6600259  0.006781938  0.008521627 1.000000000 0.92899225  0.01440080
-rs6681089  0.011533117  0.012310618 0.928992254 1.00000000  0.01766183
-rs3008244 -0.021414730 -0.015483693 0.014400801 0.01766183  1.00000000
-rs3008245 -0.035179346 -0.019228441 0.012404065 0.01611964  0.79215823
-                 SNP6
-rs1890449 -0.03517935
-rs3122053 -0.01922844
-rs6600259  0.01240406
-rs6681089  0.01611964
-rs3008244  0.79215823
-rs3008245  1.00000000</code></pre>
-<p>Each element of the LD matrices list is a matrix of LD from each
-ancestry, with column name being SNP name matched up with the summary
-statistics.</p>
-</div>
-<div id="analysis" class="section level2">
-<h2>3. Analysis</h2>
-<div id="mesusie" class="section level3">
-<h3>MESuSiE</h3>
-<pre class="r"><code>MESuSiE_res&lt;-meSuSie_core(LD_list,summ_stat_list,L=10)</code></pre>
-<pre><code>*************************************************************
-
-  Multiple Ancestry Sum of Single Effect Model (MESuSiE)          
-
-   Visit http://www.xzlab.org/software.html For Update            
-
-            (C) 2022 Boran Gao, Xiang Zhou                        
-
-              GNU General Public License                          
-
-*************************************************************
-# Start data processing for sufficient statistics 
-# Create MESuSiE object 
-# Start data analysis 
-
-# Data analysis is done, and now generates result 
-
-Potential causal SNPs with PIP &gt; 0.5:  SNP2 SNP4 SNP6 
-
-Credible sets for effects: 
-$cs
-$cs$L1
-[1] 4
-
-$cs$L2
-[1] 2
-
-$cs$L3
-[1] 5 6
-
-
-$cs_category
-     L1      L2      L3 
-&quot;WB_BB&quot;    &quot;BB&quot;    &quot;WB&quot; 
-
-$purity
-   min.abs.corr mean.abs.corr median.abs.corr
-L1    1.0000000     1.0000000       1.0000000
-L2    1.0000000     1.0000000       1.0000000
-L3    0.9961393     0.9980697       0.9980697
-
-$cs_index
-[1] 1 2 3
-
-$coverage
-[1] 0.9997947 1.0000000 1.0000000
-
-$requested_coverage
-[1] 0.95
-
-
- Use MESuSiE_Plot() for visualization
-# Total time used for the analysis: 0 mins</code></pre>
-<pre class="r"><code>MESuSiE_res$pip_config</code></pre>
-<pre><code>             WB         BB      WB_BB
-[1,] 0.07142857 0.07142857 0.02380952
-[2,] 0.07142857 0.63214915 0.36785085
-[3,] 0.07142857 0.07142857 0.02380952
-[4,] 0.07142857 0.07142857 0.99979466
-[5,] 0.18126816 0.07142857 0.05082666
-[6,] 0.56691986 0.07142857 0.20098531</code></pre>
-<p>We observed that three SNPs have a posterior inclusion probability
-(PIP) exceeding the 0.5 threshold. Upon further examination of the PIP
-for ancestry-specificity and shared traits, we identified that SNP4 is
-shared, while SNP2 and SNP6 are ancestry-specific. The categories within
-the credible set indicate the ancestries affected by the SNPs present in
-the set.</p>
-</div>
-<div id="susie" class="section level3">
-<h3>SuSiE</h3>
-<pre class="r"><code>library(susieR)
-susie_WB&lt;-susie_rss(summ_stat_list$WB$Z,LD_list$WB)
-susie_BB&lt;-susie_rss(summ_stat_list$BB$Z,LD_list$BB)
-susie_WB$pip</code></pre>
-<pre><code>     SNP1      SNP2      SNP3      SNP4      SNP5      SNP6 
-0.0000000 0.0000000 0.6052634 0.3947366 0.2398731 0.7601269 </code></pre>
-<pre class="r"><code>susie_BB$pip</code></pre>
-<pre><code>        SNP1         SNP2         SNP3         SNP4         SNP5         SNP6 
-1.015177e-11 1.000000e+00 1.704749e-04 9.998295e-01 0.000000e+00 0.000000e+00 </code></pre>
-<p>After executing the univariate SuSiE analysis, we determined that SNP
-3 and 6 are signals specific to Europeans, while SNP 2 and 4 emerged as
-signals specific to Africans, using a PIP threshold of 0.5.</p>
-</div>
-<div id="paintor" class="section level3">
-<h3>Paintor</h3>
-<pre class="r"><code>##We load the Paintor result directly
-paintor_res&lt;-read.table(&quot;/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Simulation/091223/data/toy_example/result/fig1.mcmc.paintor&quot;,header=T)
-paintor_res$Posterior_Prob</code></pre>
-<pre><code>[1] 0.040756 0.999980 0.987828 0.999956 0.993764 0.995080</code></pre>
-<p>Paintor identifies SNP2-5 as signals without distinguishing
-ancestry-specific or shared causal variant.</p>
-</div>
-</div>
-<div id="visualization" class="section level2">
-<h2>4. Visualization</h2>
-<p><img src="figure/installation.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+p_signal &lt;- ggplot(data = Signal_enrichment_long,aes(x = Cat, y = Prop, fill = Method)) +
+  geom_col(position = &quot;dodge&quot;) + scale_fill_manual(values = c(&quot;MESuSiE&quot; = &quot;#023e8a&quot;, &quot;SuSiE&quot; = &quot;#2a9d8f&quot;, &quot;Paintor&quot; = &quot;#f4a261&quot;)) +
+  geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 5/14*5) + 
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;) + 
+  xlab(&quot;&quot;) + ylab(&quot;Fold Enrichment Top Signal&quot;) +ylim(0,round(max(Signal_enrichment_long$Prop))+1) +
+  theme_bw() + custom_theme()
+p_out&lt;-p_set/p_signal+plot_annotation(tag_levels = &#39;a&#39;)&amp;theme(legend.position = &#39;bottom&#39;,plot.tag = element_text(size = 7, face = &quot;bold&quot;))
+p_out</code></pre>
+<p><img src="figure/Lipid_810.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -941,44 +897,54 @@ time zone: America/New_York
 tzcode source: system (glibc)
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
-[1] ggpubr_0.6.0    cowplot_1.1.1   dplyr_1.1.2     ggplot2_3.4.2  
-[5] susieR_0.11.84  MESuSiE_1.0     devtools_2.4.3  usethis_2.2.1  
-[9] workflowr_1.7.0
+ [1] stringr_1.5.0       ggrepel_0.9.1       susieR_0.11.84     
+ [4] coin_1.4-2          survival_3.3-1      DescTools_0.99.45  
+ [7] ggbreak_0.1.1       gridExtra_2.3       VennDiagram_1.7.3  
+[10] futile.logger_1.4.3 ggpmisc_0.4.7       ggpp_0.4.4         
+[13] patchwork_1.1.1     tidyr_1.3.0         dplyr_1.1.2        
+[16] data.table_1.14.8   ggpubr_0.6.0        ggplot2_3.4.2      
+[19] workflowr_1.7.0    
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0         farver_2.1.1             fastmap_1.1.1           
- [4] reshape_0.8.9            promises_1.2.0.1         digest_0.6.30           
- [7] lifecycle_1.0.3          ellipsis_0.3.2           processx_3.8.0          
-[10] magrittr_2.0.3           compiler_4.3.1           rlang_1.1.1             
-[13] sass_0.4.6               progress_1.2.2           tools_4.3.1             
-[16] utf8_1.2.3               yaml_2.3.7               knitr_1.39              
-[19] ggsignif_0.6.4           labeling_0.4.2           prettyunits_1.2.0       
-[22] pkgbuild_1.4.2           curl_5.0.1               plyr_1.8.8              
-[25] abind_1.4-5              pkgload_1.3.1            withr_2.5.1             
-[28] purrr_1.0.1              grid_4.3.1               fansi_1.0.5             
-[31] git2r_0.32.0             colorspace_2.1-0         scales_1.2.1            
-[34] cli_3.6.1                rmarkdown_2.22           crayon_1.5.2            
-[37] generics_0.1.3           remotes_2.4.2            rstudioapi_0.14         
-[40] httr_1.4.6               RcppArmadillo_0.11.1.1.0 sessioninfo_1.2.2       
-[43] cachem_1.0.8             stringr_1.5.0            parallel_4.3.1          
-[46] matrixStats_1.0.0        vctrs_0.6.2              Matrix_1.5-4.1          
-[49] jsonlite_1.8.3           carData_3.0-5            car_3.1-2               
-[52] callr_3.7.3              hms_1.1.2                mixsqp_0.3-48           
-[55] ggrepel_0.9.1            rstatix_0.7.2            irlba_2.3.5.1           
-[58] jquerylib_0.1.4          tidyr_1.3.0              glue_1.6.2              
-[61] nloptr_2.0.3             ps_1.7.2                 stringi_1.7.12          
-[64] gtable_0.3.1             later_1.3.1              RcppZiggurat_0.1.6      
-[67] munsell_0.5.0            tibble_3.2.1             pillar_1.9.0            
-[70] htmltools_0.5.5          R6_2.5.1                 rprojroot_2.0.3         
-[73] evaluate_0.18            lattice_0.20-45          highr_0.10              
-[76] backports_1.4.1          Rfast_2.0.6              memoise_2.0.1           
-[79] broom_1.0.5              httpuv_1.6.11            bslib_0.5.0             
-[82] Rcpp_1.0.11              gridExtra_2.3            whisker_0.4.1           
-[85] xfun_0.39                fs_1.6.2                 getPass_0.2-2           
-[88] pkgconfig_2.0.3         </code></pre>
+  [1] formatR_1.14         gld_2.6.5            sandwich_3.0-2      
+  [4] readxl_1.4.2         rlang_1.1.1          magrittr_2.0.3      
+  [7] git2r_0.32.0         multcomp_1.4-25      matrixStats_1.0.0   
+ [10] e1071_1.7-13         compiler_4.3.1       getPass_0.2-2       
+ [13] callr_3.7.3          vctrs_0.6.2          quantreg_5.95       
+ [16] crayon_1.5.2         pkgconfig_2.0.3      fastmap_1.1.1       
+ [19] backports_1.4.1      labeling_0.4.2       utf8_1.2.3          
+ [22] promises_1.2.0.1     rmarkdown_2.22       ps_1.7.2            
+ [25] MatrixModels_0.5-1   purrr_1.0.1          xfun_0.39           
+ [28] modeltools_0.2-23    cachem_1.0.8         aplot_0.1.10        
+ [31] jsonlite_1.8.3       highr_0.10           later_1.3.1         
+ [34] reshape_0.8.9        irlba_2.3.5.1        broom_1.0.5         
+ [37] parallel_4.3.1       R6_2.5.1             bslib_0.5.0         
+ [40] stringi_1.7.12       car_3.1-2            boot_1.3-28.1       
+ [43] jquerylib_0.1.4      cellranger_1.1.0     Rcpp_1.0.11         
+ [46] knitr_1.39           zoo_1.8-12           httpuv_1.6.11       
+ [49] Matrix_1.5-4.1       splines_4.3.1        tidyselect_1.2.0    
+ [52] rstudioapi_0.14      abind_1.4-5          yaml_2.3.7          
+ [55] codetools_0.2-19     processx_3.8.0       plyr_1.8.8          
+ [58] lattice_0.20-45      tibble_3.2.1         withr_2.5.1         
+ [61] evaluate_0.18        gridGraphics_0.5-1   lambda.r_1.2.4      
+ [64] proxy_0.4-27         pillar_1.9.0         carData_3.0-5       
+ [67] whisker_0.4.1        stats4_4.3.1         ggfun_0.0.9         
+ [70] generics_0.1.3       rprojroot_2.0.3      munsell_0.5.0       
+ [73] scales_1.2.1         rootSolve_1.8.2.3    class_7.3-20        
+ [76] glue_1.6.2           lmom_2.8             tools_4.3.1         
+ [79] SparseM_1.81         ggsignif_0.6.4       Exact_3.1           
+ [82] fs_1.6.2             mvtnorm_1.1-3        libcoin_1.0-9       
+ [85] colorspace_2.1-0     cli_3.6.1            futile.options_1.0.1
+ [88] fansi_1.0.5          expm_0.999-7         mixsqp_0.3-48       
+ [91] gtable_0.3.1         rstatix_0.7.2        yulab.utils_0.0.4   
+ [94] sass_0.4.6           digest_0.6.30        TH.data_1.1-2       
+ [97] ggplotify_0.1.0      farver_2.1.1         htmltools_0.5.5     
+[100] lifecycle_1.0.3      httr_1.4.6           MASS_7.3-57         </code></pre>
+</div>
 </div>
 </div>
 </div>

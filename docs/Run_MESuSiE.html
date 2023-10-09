@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Boran Gao" />
+<meta name="author" content="borangao" />
 
-<meta name="date" content="2022-05-30" />
+<meta name="date" content="2023-10-09" />
 
-<title>MESuSiE</title>
+<title>Run MESuSiE</title>
 
 <script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -380,9 +380,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">MESuSiE</h1>
-<h4 class="author">Boran Gao</h4>
-<h4 class="date">2022-05-30</h4>
+<h1 class="title toc-ignore">Run MESuSiE</h1>
+<h4 class="author">borangao</h4>
+<h4 class="date">2023-10-09</h4>
 
 </div>
 
@@ -390,7 +390,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -401,8 +401,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -415,9 +415,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>meSuSie_Analysis/</code> <span
@@ -452,6 +452,116 @@ class="panel-collapse collapse">
 <p>Great! Since the R Markdown file has been committed to the Git
 repository, you know the exact version of the code that produced these
 results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220530code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220530)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220530code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220530)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
+</p>
+</div>
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/data/MESuSiE_Example.RData
+</td>
+<td style="text-align:left;">
+data/MESuSiE_Example.RData
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -517,10 +627,11 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
-(<code>docs/index.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+made to the R Markdown (<code>analysis/Run_MESuSiE.Rmd</code>) and HTML
+(<code>docs/Run_MESuSiE.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -549,7 +660,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/index.Rmd" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/Run_MESuSiE.Rmd" target="_blank">62ce4b3</a>
 </td>
 <td>
 borangao
@@ -561,159 +672,6 @@ borangao
 Update my analysis
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/10cb2675fd78d87eba45962277bae630c1286202/docs/index.html" target="_blank">10cb267</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/65fba54dc6812c6e5d0624bc67e8a30a14f55722/analysis/index.Rmd" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/65fba54dc6812c6e5d0624bc67e8a30a14f55722/docs/index.html" target="_blank">65fba54</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-11-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/e369d34dbed53df7f53f400a7fc794afa1c4d5a3/analysis/index.Rmd" target="_blank">e369d34</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-31
-</td>
-<td>
-wflow_git_commit(all = TRUE)
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/e369d34dbed53df7f53f400a7fc794afa1c4d5a3/docs/index.html" target="_blank">e369d34</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-31
-</td>
-<td>
-wflow_git_commit(all = TRUE)
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/d41b59e599f7ee711f71476d2da27e9cbc39d55e/docs/index.html" target="_blank">d41b59e</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/8a1d176b24c7ec7cb790a747947962d008e52407/docs/index.html" target="_blank">8a1d176</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/8aa902e84ee8549729b87d802e06a350a456be53/docs/index.html" target="_blank">8aa902e</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/borangao/meSuSie_Analysis/blob/a1828a2961bb1f8c929016ee1d8b55419c561934/analysis/index.Rmd" target="_blank">a1828a2</a>
-</td>
-<td>
-borangao
-</td>
-<td>
-2022-05-30
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -721,39 +679,239 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<div id="mesusie-overview" class="section level1">
-<h1>MESuSiE Overview</h1>
-<p><img src="Fig_1.png" /></p>
-<p>MESuSiE is a multiple ancestry extension of Sum of Single Effect
-model for GWAS fine-mapping.MESuSiE relies on GWAS summary statistics
-from multiple ancestries, properly accounts for the LD structure of the
-focal genomic region in multiple ancestries, and explicitly models both
-shared and ancestry-specific causal signals to accommodate causal effect
-size similarity as well as heterogeneity across ancestries. MESuSiE
-outputs posterior inclusion probability of variant being shared or
-ancestry-specific causal variants.</p>
+<div id="mesusie-example" class="section level1">
+<h1>MESuSiE Example</h1>
+<div id="data-formatting-for-mesusie" class="section level2">
+<h2>1. Data Formatting for MESuSiE:</h2>
+<p>Use the example from Data preparation. We provide
+<code>organize data</code> and <code>organize_ld</code> function to do
+the sanity check and organize the summary statistics and LD into the
+MESuSiE input format</p>
+<pre class="r"><code>library(dplyr)
+library(MESuSiE)
+load(&quot;/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/data/MESuSiE_Example.RData&quot;)
+summ_stat_list&lt;-organize_gwas(UKBB_example%&gt;%rename(SNP = CHR_POS),GLGC_example%&gt;%rename(SNP = CHR_POS),c(&quot;EUR&quot;,&quot;AFR&quot;))
+colnames(WB_cov)&lt;-UKBB_example$CHR_POS
+colnames(BB_cov)&lt;-GLGC_example$CHR_POS
+LD_list&lt;-organize_ld(WB_cov,BB_cov,summ_stat_list)</code></pre>
 </div>
-<div id="mesusie-model" class="section level1">
-<h1>MESuSiE Model</h1>
-<p>MESuSiE builds upon the sum of single effect model, and extend the
-normal assumption on the effec size of causal SNP to multivariate
-normal, and thus capture the correlation across ancestries. fashion:
-<span class="math display">\[
-  \left(\begin{matrix}{y}_\mathbf{1}\\{y}_\mathbf{2}\\\end{matrix}\right)=\left[\begin{matrix}{X}_\mathbf{1}&amp;0\\0&amp;{X}_\mathbf{2}\\\end{matrix}\right]\ast\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right)+\left(\begin{matrix}{\epsilon}_\mathbf{1}\\{\epsilon}_\mathbf{2}\\\end{matrix}\right),
-\]</span> In the above equation, <span
-class="math inline">\(y_1,y_2\)</span> are standardized phenotype for
-each ancestry, <span class="math inline">\(X_1,X_2\)</span> are centered
-genotype matrices, <span class="math inline">\(b_1,b_2\)</span> are sum
-of the single effect models which are in the form, <span
-class="math display">\[
-\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right)
-= \sum_l \gamma_l\bigotimes
-\left(z_l\cdot\left(\begin{matrix}{\beta}_\mathbf{1l}\\{\beta}_\mathbf{2l}\\\end{matrix}\right)
-\right)
-\]</span> which represents the summation of the single effects.</p>
-<p><strong>Note</strong>: Our software is intended strictly for research
-purposes. We firmly stand against any form of racial discrimination and
-advocate for the ethical use of MESuSiE.</p>
+<div id="run-mesusie" class="section level2">
+<h2>2. Run MESuSiE:</h2>
+<pre class="r"><code>MESuSiE_res&lt;-meSuSie_core(LD_list,summ_stat_list,L=10)</code></pre>
+<pre><code>*************************************************************
+
+  Multiple Ancestry Sum of Single Effect Model (MESuSiE)          
+
+   Visit http://www.xzlab.org/software.html For Update            
+
+            (C) 2022 Boran Gao, Xiang Zhou                        
+
+              GNU General Public License                          
+
+*************************************************************
+# Start data processing for sufficient statistics 
+# Create MESuSiE object 
+# Start data analysis 
+
+# Data analysis is done, and now generates result 
+
+Potential causal SNPs with PIP &gt; 0.5:  22_21958872 
+
+Credible sets for effects: 
+$cs
+$cs$L1
+ [1]  7  8 26 38 40 41 57 61 62 69 71 79 82
+
+
+$cs_category
+       L1 
+&quot;EUR_AFR&quot; 
+
+$purity
+   min.abs.corr mean.abs.corr median.abs.corr
+L1    0.9978499     0.9991224       0.9992341
+
+$cs_index
+[1] 1
+
+$coverage
+[1] 0.9551583
+
+$requested_coverage
+[1] 0.95
+
+
+ Use MESuSiE_Plot() for visualization
+# Total time used for the analysis: 0.07 mins</code></pre>
+<div id="mesusie-result-interpretation" class="section level3">
+<h3>MESuSiE Result Interpretation:</h3>
+<p>The MESuSiE results can be interpreted in terms of the 95% credible
+set and SNP-level Posterior Inclusion Probabilities (PIPs).</p>
+<ul>
+<li><strong>95% credible set</strong> MESuSiE’s 95% credible set
+comprises SNPs with a non-zero effect in at least one ancestry. These
+SNPs are further categorized as either “shared” or “ancestry-specific”
+based on their contribution to the credible set.</li>
+</ul>
+<p>For instance, in the provided example, the credible set contains 13
+SNPs labeled as <code>EUR_AFR</code>, indicating these SNPs are shared
+across multiple ancestries.</p>
+<ul>
+<li><p><strong>PIPs</strong> We used a PIP cutoff of 0.5 to declare
+signal.</p>
+<ul>
+<li><strong>PIP for SNP have non-zero effect in at least one
+ancestry</strong></li>
+</ul>
+<pre class="r"><code>MESuSiE_res$pip[MESuSiE_res$cs$cs$L1]</code></pre>
+<pre><code> [1] 0.02617149 0.02411160 0.04600253 0.03558618 0.02805318 0.03538103
+ [7] 0.02041509 0.05667729 0.05446116 0.04994392 0.52385726 0.02241395
+[13] 0.03208367</code></pre>
+<p>In the example provided, one SNP exhibits a PIP greater than 0.5.
+However, this does not inform us whether the SNP is shared or
+ancestry-specific. To make that inference, we need to further analyze
+the PIP values for shared or ancestry-specific effects, which is the
+unique feature provided by MESuSiE.</p>
+<ul>
+<li><strong>PIP for shared or ancestry-specific effect</strong></li>
+</ul>
+<pre class="r"><code>MESuSiE_res$pip_config[MESuSiE_res$cs$cs$L1,]</code></pre>
+<pre><code>               EUR          AFR    EUR_AFR
+ [1,] 0.0003748811 0.0002535134 0.02617115
+ [2,] 0.0003748810 0.0002532205 0.02411128
+ [3,] 0.0003748798 0.0002476710 0.04600234
+ [4,] 0.0003748806 0.0002482805 0.03558589
+ [5,] 0.0003748802 0.0002483030 0.02805295
+ [6,] 0.0003748805 0.0002483253 0.03538074
+ [7,] 0.0003748796 0.0002484404 0.02041492
+ [8,] 0.0003748794 0.0002484522 0.05667714
+ [9,] 0.0003748793 0.0002485671 0.05446102
+[10,] 0.0003748793 0.0002480695 0.04994379
+[11,] 0.0003748793 0.0002610915 0.52385712
+[12,] 0.0003748795 0.0002468203 0.02241380
+[13,] 0.0003748793 0.0002458986 0.03208353</code></pre>
+<p>From the results, SNP with a PIP greater than 0.5 represents a shared
+causal signal.</p></li>
+</ul>
+</div>
+</div>
+<div id="configuring-tuning-parameters" class="section level2">
+<h2>3.Configuring Tuning Parameters</h2>
+<p>When running <code>meSuSie_core</code>, various tuning parameters can
+be adjusted to refine the results:</p>
+<ul>
+<li><strong>Number of Effects (<code>L</code>)</strong>: Specify the
+number of effects to consider.</li>
+<li><strong>Prior Weights (<code>prior_weights</code>)</strong>: This
+represents the prior probability of a SNP being causal. By default, it
+is set to . Users can adjust this parameter to incorporate functional
+annotation into MESuSiE.</li>
+<li><strong>Ancestry Weight (<code>ancestry_weight</code>)</strong>:
+Configure the weighting for different ancestries. We set the ratio of
+ancestry-specific to shared as 3:1 to encourage the ancestry-specific
+causal SNP detection.
+<ul>
+<li><strong>Pure shared signal:</strong> ancestry weight can be set to
+c(0,0,1)</li>
+<li><strong>Encourage Ancestry-specific signal</strong> ancestry weight
+can be set to c(5,5,1)/sum(c(5,5,1))</li>
+</ul></li>
+<li><strong>Estimate Residual Variance
+(<code>estimate_residual_variance</code>)</strong>: This parameter can
+be set to either TRUE or FALSE. When set to TRUE, the residual variance
+is estimated, while when set to FALSE, it is fixed at one. For
+multi-ancestry GWAS fine-mapping, it’s typically advisable to fix the
+residual variance at one to enhance robustness, given that the
+heritability of the local region is often minimal. However, when using
+MESuSiE for multi-ancestry eQTL fine-mapping, it’s recommended to
+estimate the residual variance since the heritability of the gene
+expression is relatively significant.</li>
+<li><strong>Correlation Method and Threshold
+(<code>cor_method &amp; cor_threshold</code>)</strong>:
+<ul>
+<li><strong>cor_method</strong>: Choose the method to determine the 95%
+credible set based on SNP correlations within the region. Commonly used
+methods include determining the minimum, mean, or median of the absolute
+correlation values. By default, this is set to
+<code>min_abs_corr</code>, representing the minimum absolute correlation
+permissible within a credible set across ancestries. This is a prevalent
+threshold for genotype data in genetic studies.</li>
+<li><strong>cor_threshold</strong>: Define the cutoff for
+<code>min_abs_corr</code>. By default, this is set to 0.5.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: We’ve made available function
+<code>meSuSie_get_cs</code> allowing users to tweak the results based on
+varying <code>cor_method</code> and <code>cor_threshold</code>. The best
+part? You can adjust without having to rerun the entire analysis.</p>
+</blockquote>
+</div>
+<div id="mesusie-visulization" class="section level2">
+<h2>4. MESuSiE Visulization:</h2>
+<pre class="r"><code>MESuSiE_Plot(MESuSiE_res,LD_list,summ_stat_list)</code></pre>
+<p><img src="figure/Run_MESuSiE.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04.6 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3;  LAPACK version 3.9.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: America/New_York
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] MESuSiE_1.0     dplyr_1.1.2     workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.1             xfun_0.39                bslib_0.5.0             
+ [4] ggplot2_3.4.2            processx_3.8.0           ggrepel_0.9.1           
+ [7] lattice_0.20-45          callr_3.7.3              vctrs_0.6.2             
+[10] tools_4.3.1              ps_1.7.2                 generics_0.1.3          
+[13] tibble_3.2.1             fansi_1.0.5              highr_0.10              
+[16] pkgconfig_2.0.3          Matrix_1.5-4.1           data.table_1.14.8       
+[19] lifecycle_1.0.3          compiler_4.3.1           farver_2.1.1            
+[22] stringr_1.5.0            git2r_0.32.0             progress_1.2.2          
+[25] munsell_0.5.0            getPass_0.2-2            httpuv_1.6.11           
+[28] htmltools_0.5.5          sass_0.4.6               yaml_2.3.7              
+[31] later_1.3.1              pillar_1.9.0             nloptr_2.0.3            
+[34] crayon_1.5.2             jquerylib_0.1.4          whisker_0.4.1           
+[37] tidyr_1.3.0              ellipsis_0.3.2           cachem_1.0.8            
+[40] tidyselect_1.2.0         digest_0.6.30            stringi_1.7.12          
+[43] purrr_1.0.1              labeling_0.4.2           RcppArmadillo_0.11.1.1.0
+[46] cowplot_1.1.1            rprojroot_2.0.3          fastmap_1.1.1           
+[49] grid_4.3.1               colorspace_2.1-0         cli_3.6.1               
+[52] magrittr_2.0.3           utf8_1.2.3               withr_2.5.1             
+[55] prettyunits_1.2.0        scales_1.2.1             promises_1.2.0.1        
+[58] rmarkdown_2.22           httr_1.4.6               hms_1.1.2               
+[61] evaluate_0.18            knitr_1.39               irlba_2.3.5.1           
+[64] rlang_1.1.1              Rcpp_1.0.11              mixsqp_0.3-48           
+[67] glue_1.6.2               rstudioapi_0.14          jsonlite_1.8.3          
+[70] R6_2.5.1                 fs_1.6.2                </code></pre>
+</div>
+</div>
 </div>
 
 
