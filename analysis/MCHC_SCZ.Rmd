@@ -1,5 +1,5 @@
 ---
-title: "MCHC_SCZ"
+title: "MCHC SCZ"
 author: "borangao"
 date: "2023-10-09"
 output: workflowr::wflow_html
