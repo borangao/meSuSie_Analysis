@@ -4,15 +4,21 @@ navbar:
   title: MESuSiE
   left:
   - text: Introduction
-    href: index.html
-  - text: Installation
     href: installation.html
-  - text: Example Analysis
+  - text: Data Preparation
+    href: GWAS_QC.html
+  - text: Run MESuSiE
+    href: Run_MESuSiE.html
+  - text: Analysis reproduce
     menu:
-    - text: Shared Causal Variant
-      href: HDL_APOE.html
-    - text: Ancestry-specific Causal Variant
-      href: TC_ARIC4.html
+    - text: Simulation
+      href: Simulation.html
+    - text: 711 Regions of Lipid
+      href: Lipid_711.html
+    - text: 810 Regions of Lipid
+      href: Lipid_810.html
+    - text: MCHC and SCZ
+      href: MCHC_SCZ.html      
   right:
   - icon: fab fa-github
     text: Source code

@@ -16,7 +16,7 @@ MESuSiE is a multiple ancestry extension of Sum of Single Effect model for GWAS 
 ## MESuSiE Overview
 MESuSiE relies on GWAS summary statistics from multiple ancestries, properly accounts for the LD structure of the focal genomic region in multiple ancestries, and explicitly models both shared and ancestry-specific causal signals to accommodate causal effect size similarity as well as heterogeneity across ancestries. MESuSiE outputs posterior inclusion probability of variant being shared or ancestry-specific causal variants. 
 
-![](MESuSiE_Illustration.jpg)
+![](Fig_1.png)
 
 ## MESuSiE Model 
 MESuSiE builds upon the sum of single effect model, and extend the normal assumption on the effec size of causal SNP to multivariate normal, and thus capture the correlation across ancestries.
