@@ -13,13 +13,14 @@ editor_options:
 
 ## Step-by-Step Guideline
 
-We used GWAS summary statistics of HDL on chromosome 22 from UKBB and GLGC for illustration purposes.
+For illustrative purposes, we utilized the GWAS summary statistics of HDL on chromosome 22 from the UK Biobank (UKBB) and the Global Lipids Genetics Consortium (GLGC). We offer a suite of functions for data preparation, which include `GWAS_QC`,`find_common_snps`,`allele_flip`. Additionally, we have adapted the `kriging_rss` function from SuSiE for enhanced functionality.
 
 ### 1. GWAS Preparations:
 
 -   **Uniform QC:** Apply a uniform QC process for each individual ancestry.
 
-We recommend filtering strand-ambiguous SNPs, multi-allelic SNPs, SNPs in MHC regions, and those with MAF \< 0.001. The `GWAS_QC` function requires summary data of CHR, POS, CHR_POS, REF, ALT, MAF, BETA, and SE. Users can specify a MAF threshold to pass into the function.
+We advise removing strand-ambiguous SNPs, multi-allelic SNPs, SNPs within MHC regions, and SNPs with a Minor Allele Frequency (MAF) less than 0.001. The `GWAS_QC` function requires summary data columns: CHR, POS, CHR_POS, REF, ALT, MAF, BETA, and SE. Additionally, users have the flexibility to define a specific MAF threshold when using the function.
+
 
 ```{r, message=FALSE, warning=FALSE,tidy = TRUE}
   library(MESuSiE)
@@ -36,7 +37,7 @@ We recommend filtering strand-ambiguous SNPs, multi-allelic SNPs, SNPs in MHC re
 
 -   **Subset of SNPs:** Start with a consistent subset of SNPs from various ancestries.
 
-Here we use `find_common_snps` to subset a common set of SNPs across ancestries. We matched up by CHR_POS and also check the reference and alternative allele are matched up together
+Here we use `find_common_snps` to subset a common set of SNPs across ancestries. We matched up by CHR_POS and also check the reference and alternative allele are matched up together.
 
 ```{r, message=FALSE, warning=FALSE,tidy = TRUE}
   common_SNP<-find_common_snps(UKBB,GLGC)
@@ -46,7 +47,7 @@ Here we use `find_common_snps` to subset a common set of SNPs across ancestries.
 
 -   **Identify Variation & Adjust BETA & Z Score:** Identify variation in reference alleles across ancestries, and adjust the sign of the BETA and Z score.
 
-Here we use `allele_flip` to match up the GLGC reference allele with UKBB reference allele. The beta effect size is flipped if there is a reference allele difference.
+In this step, we employ the `allele_flip` function to align the reference alleles of the GLGC dataset with those of the UKBB dataset. If there are discrepancies in the reference alleles, the beta effect size is adjusted accordingly.
 
 ```{r, message=FALSE, warning=FALSE,tidy = TRUE}
   GLGC_subset_flip<-allele_flip(UKBB_subset,GLGC_subset)
@@ -140,7 +141,7 @@ BB_diagnostic$plot
 
 We see SNPs are more close to the line in UKBB and noisy in GLGC as we use in-sample LD for UKBB, and external LD for GLGC.
 
-#### Observations & Recommendations:
+### 4. Observations & Recommendations:
 
 -   **LD Mismatch Indicators:** SNPs that deviate most from the diagonal in the plots above suggest mismatches. It's recommended, per [SuSiE](https://stephenslab.github.io/susieR/) guidelines (Wang et al., JRSSB 2020), to identify LD mismatched SNPs that meet these criteria:
 
@@ -160,7 +161,7 @@ We see SNPs are more close to the line in UKBB and noisy in GLGC as we use in-sa
 
 -   **Recommendation:** We urge users to employ the most recent UKBB genotype datasets. Always check for LD mismatches before initiating fine-mapping to ensure accurate results. Remove the mismatched SNP from the analysis if needed. There are also alternative software tools available for detecting LD mismatches, such as [SLALOM](https://github.com/mkanai/slalom) (Kanai et al., Cell Genomics 2022), [DENTIST](https://doi.org/10.5281/zenodo.5516202) (Chen et al., NC 2021).
 
-### 4. Proof of concept:
+### 5. Proof of concept:
 
 -   **Create mismatch GWAS data:** Set one of the GWAS signal Z-score to 0.
 

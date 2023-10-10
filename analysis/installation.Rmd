@@ -29,33 +29,34 @@ The dataset contains:
 - Within each cluster, the SNPs show strong correlations.
 - Between clusters, SNP correlations are weak.
 
+### Causal SNPs: 
+
+The primary advantage of MESuSiE lies in its capacity to differentiate between shared and ancestry-specific causal signals. For demonstration purposes, we simulated a dataset containing one shared and two ancestry-specific causal signals.
+
+- **SNP 4**: Simulated as a shared causal SNP across ancestries.
+- **SNP 2**: Simulated as the causal SNP specific to the BB ancestry.
+- **SNP 6**: Simulated as the causal SNP specific to the WB ancestry.
+
 ### SNP Grouping
 
 1. **Cluster 1**: Contains SNP 1 and 2.
 2. **Cluster 2**: Contains SNP 3 and 4.
 3. **Cluster 3**: Contains SNP 5 and 6.
 
-### Causal SNPs: 
-
-Based on our simulations, the SNPs are postulated to have the following causal relationships:
-
-- **SNP 4**: Simulated as a shared causal SNP across ancestries.
-- **SNP 2**: Simulated as the causal SNP specific to the BB ancestry.
-- **SNP 6**: Simulated as the causal SNP specific to the WB ancestry.
-
-
 ## 2. Input of MESuSiE
-The data is provided with the package. For the input of the MESuSiE, we require a list of summary statistics and a list of LD matrices from multiple ancestries.
+The package comes with the necessary data included. To use MESuSiE, two lists are required: one for summary statistics and another for LD matrices, each from multiple ancestries. It's essential to name each element in these lists, ensuring that the naming is consistent between the summary statistics and LD matrices.
 ```{r,message=FALSE,warning=FALSE}
 data(summ_stat_list)
 data(LD_list)
 summ_stat_list
 ```
-Each element of the summary statistics list is a data frame of summary statistics from each ancestry with column name SNP, Beta, Se, Z, and N representing SNP information, marginal effect size, standard error, Z-scores and number of sample.
+Each element in the summary statistics list represents a data frame of GWAS summary statistics for each ancestry. This data frame should have columns named SNP, Beta, Se, Z, and N, which correspond to the SNP information, marginal effect size, standard error, Z-scores, and sample size, respectively.
 ```{r,message=FALSE,warning=FALSE}
 LD_list
 ```
-Each element of the LD matrices list is a matrix of LD from each ancestry, with column name being SNP name matched up with the summary statistics. 
+Each element in the LD matrices list corresponds to an LD matrix for a specific ancestry. The column names of this matrix should match the SNP names found in the summary statistics, ensuring consistency across data.
+
+>**Note:** For a detailed tutorial, please refer to [Data Preparation](https://borangao.github.io/meSuSie_Analysis/GWAS_QC.html) and [analysis](https://borangao.github.io/meSuSie_Analysis/Run_MESuSiE.html).
 
 ## 3. Analysis 
 
@@ -74,7 +75,7 @@ susie_BB<-susie_rss(summ_stat_list$BB$Z,LD_list$BB)
 susie_WB$pip
 susie_BB$pip
 ```
-After executing the univariate SuSiE analysis, we determined that SNP 3 and 6 are signals specific to Europeans, while SNP 2 and 4 emerged as signals specific to Africans, using a PIP threshold of 0.5.
+For the univariate SuSiE analysis, we found that SNP 3 and 6 are signals distinct to Europeans. In contrast, SNP 2 and 4 are signals unique to Africans, based on a PIP threshold of 0.5.
 
 ### Paintor
 ```{r,message=FALSE,warning=FALSE}
@@ -83,11 +84,11 @@ paintor_res<-read.table("/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/S
 paintor_res$Posterior_Prob
 ```
 
-Paintor identifies SNP2-5 as signals without distinguishing ancestry-specific or shared causal variant.
+Paintor identifies SNP2-6 as signals without distinguishing ancestry-specific or shared causal variant.
 
 
 ## 4. Visualization
-```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=8}
+```{r,echo=FALSE,message=FALSE,warning=FALSE,fig.width=9,fig.height=6}
 library(ggplot2)
 library(dplyr)
 ###########################################################################
@@ -116,8 +117,6 @@ custom_theme <- function() {
     axis.line = element_line(color = "black")
   )
 }
-
-
 #############################################################
 #
 #

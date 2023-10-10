@@ -10,7 +10,30 @@ editor_options:
 # MESuSiE Example
 ## 1. Data Formatting for MESuSiE:
 
-Use the example from Data preparation. We provide `organize data` and `organize_ld` function to do the sanity check and organize the summary statistics and LD into the MESuSiE input format
+Use the example from Data preparation. We provide `organize data` and `organize_ld` function to do the sanity check and organize the summary statistics and LD into the MESuSiE input format.
+
+### `organize_gwas` Function
+
+The `organize_gwas` function harmonizes two input GWAS datasets. Specifically, it:
+
+1. Normalizes column names for internal processing.
+2. Validates the presence of essential columns like SNP, Beta, Se, Z, and N and computes missing values as necessary.
+3. Identifies strand-ambiguous and multi-allelic SNPs.
+4. Ensures that SNPs match in both datasets, subsetting to the common set if needed.
+5. Checks the consistency of REF and ALT alleles across the datasets, adjusting signs and flipping alleles where necessary.
+6. Returns the organized datasets in a list format with user-specified names.
+
+This function ensures datasets from varied sources are compatible and ready for subsequent analysis with MESuSiE.
+
+### `organize_ld` Function
+
+The `organize_ld` function ensures that two LD matrices are symmetric and compatible with provided GWAS datasets:
+
+1. Adjusts the LD matrices to be symmetric if they aren't already.
+2. Ensures there are no NA values within the LD matrices.
+3. Validates that the LD matrices have SNP names in their column names and are consistent with the GWAS data.
+4. Returns the organized LD matrices in a list format with names consistent with the GWAS datasets.
+
 
 ```{r,message=FALSE, warning=FALSE}
 library(dplyr)

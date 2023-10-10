@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ## Introduction
-> **Note**: all the code and analysis reproduced here can be found in [Zenodo](https://zenodo.org/deposit/8411004#)
+> **Note**: all the code and analysis reproduced here can be found in [Repository](https://zenodo.org/deposit/8411004#)
 
 In addition to lipid traits of European and African ancestry, we further did analysis in MCHC and SCZ in European and East Asian ancestry.
 
