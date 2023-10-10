@@ -40,7 +40,7 @@ size_power
 ```
 
 ## PIP of signal in at least one ancestry
-```{r,message=FALSE,warning=FALSE,fig.height= 9}
+```{r,message=FALSE,warning=FALSE,fig.height= 8}
 ##########################################################
 #
 #             Either ancestry 
@@ -79,7 +79,7 @@ ROC_FDR_Power_Calibration_Either_Plot
 ```
 
 ## PIP of shared signal 
-```{r,message=FALSE,warning=FALSE,fig.height= 9}
+```{r,message=FALSE,warning=FALSE,fig.height= 8}
 ##########################################################
 #
 #             Shared Signal
