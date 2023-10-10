@@ -458,15 +458,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -476,7 +476,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -496,8 +496,6 @@ Untracked files:
     Untracked:  data/UKBB_chr_22.txt
 
 Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
     Deleted:    analysis/illustration.Rmd
     Deleted:    analysis/toy_example.Rmd
 
@@ -544,6 +542,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/ba8db567b85c23b12dd18456c89353b3fcfc63a2/analysis/index.Rmd" target="_blank">ba8db56</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Update my analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/index.html" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -725,20 +757,22 @@ Start workflowr project.
 <h1>MESuSiE Overview</h1>
 <p><img src="Fig_1.png" /></p>
 <p>MESuSiE is a multiple ancestry extension of Sum of Single Effect
-model for GWAS fine-mapping.MESuSiE relies on GWAS summary statistics
-from multiple ancestries, properly accounts for the LD structure of the
-focal genomic region in multiple ancestries, and explicitly models both
-shared and ancestry-specific causal signals to accommodate causal effect
-size similarity as well as heterogeneity across ancestries. MESuSiE
-outputs posterior inclusion probability of variant being shared or
+model (<a
+href="https://academic.oup.com/jrsssb/article/82/5/1273/7056114">SuSiE</a>,
+Wang et al., 2020 JRSSB). MESuSiE relies on GWAS summary statistics from
+multiple ancestries, properly accounts for the LD structure of the local
+genomic region in multiple ancestries, and explicitly models both shared
+and ancestry-specific causal signals to accommodate causal effect size
+similarity as well as heterogeneity across ancestries. MESuSiE outputs
+posterior inclusion probability of variant being shared or
 ancestry-specific causal variants.</p>
 </div>
 <div id="mesusie-model" class="section level1">
 <h1>MESuSiE Model</h1>
 <p>MESuSiE builds upon the sum of single effect model, and extend the
 normal assumption on the effec size of causal SNP to multivariate
-normal, and thus capture the correlation across ancestries. fashion:
-<span class="math display">\[
+normal, and thus capture the correlation across ancestries.</p>
+<p><span class="math display">\[
   \left(\begin{matrix}{y}_\mathbf{1}\\{y}_\mathbf{2}\\\end{matrix}\right)=\left[\begin{matrix}{X}_\mathbf{1}&amp;0\\0&amp;{X}_\mathbf{2}\\\end{matrix}\right]\ast\left(\begin{matrix}{b}_\mathbf{1}\\{b}_\mathbf{2}\\\end{matrix}\right)+\left(\begin{matrix}{\epsilon}_\mathbf{1}\\{\epsilon}_\mathbf{2}\\\end{matrix}\right),
 \]</span> In the above equation, <span
 class="math inline">\(y_1,y_2\)</span> are standardized phenotype for
@@ -751,9 +785,11 @@ class="math display">\[
 \left(z_l\cdot\left(\begin{matrix}{\beta}_\mathbf{1l}\\{\beta}_\mathbf{2l}\\\end{matrix}\right)
 \right)
 \]</span> which represents the summation of the single effects.</p>
+<blockquote>
 <p><strong>Note</strong>: Our software is intended strictly for research
 purposes. We firmly stand against any form of racial discrimination and
 advocate for the ethical use of MESuSiE.</p>
+</blockquote>
 </div>
 
 

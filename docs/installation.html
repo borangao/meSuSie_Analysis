@@ -542,15 +542,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -560,7 +560,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -580,8 +580,6 @@ Untracked files:
     Untracked:  data/UKBB_chr_22.txt
 
 Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
     Deleted:    analysis/illustration.Rmd
     Deleted:    analysis/toy_example.Rmd
 
@@ -629,6 +627,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/ba8db567b85c23b12dd18456c89353b3fcfc63a2/analysis/installation.Rmd" target="_blank">ba8db56</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Update my analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/installation.html" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -724,18 +756,12 @@ manuscript.</p>
 <li>Within each cluster, the SNPs show strong correlations.</li>
 <li>Between clusters, SNP correlations are weak.</li>
 </ul>
-<div id="snp-grouping" class="section level3">
-<h3>SNP Grouping</h3>
-<ol style="list-style-type: decimal">
-<li><strong>Cluster 1</strong>: Contains SNP 1 and 2.</li>
-<li><strong>Cluster 2</strong>: Contains SNP 3 and 4.</li>
-<li><strong>Cluster 3</strong>: Contains SNP 5 and 6.</li>
-</ol>
-</div>
 <div id="causal-snps" class="section level3">
 <h3>Causal SNPs:</h3>
-<p>Based on our simulations, the SNPs are postulated to have the
-following causal relationships:</p>
+<p>The primary advantage of MESuSiE lies in its capacity to
+differentiate between shared and ancestry-specific causal signals. For
+demonstration purposes, we simulated a dataset containing one shared and
+two ancestry-specific causal signals.</p>
 <ul>
 <li><strong>SNP 4</strong>: Simulated as a shared causal SNP across
 ancestries.</li>
@@ -745,12 +771,22 @@ BB ancestry.</li>
 WB ancestry.</li>
 </ul>
 </div>
+<div id="snp-grouping" class="section level3">
+<h3>SNP Grouping</h3>
+<ol style="list-style-type: decimal">
+<li><strong>Cluster 1</strong>: Contains SNP 1 and 2.</li>
+<li><strong>Cluster 2</strong>: Contains SNP 3 and 4.</li>
+<li><strong>Cluster 3</strong>: Contains SNP 5 and 6.</li>
+</ol>
+</div>
 </div>
 <div id="input-of-mesusie" class="section level2">
 <h2>2. Input of MESuSiE</h2>
-<p>The data is provided with the package. For the input of the MESuSiE,
-we require a list of summary statistics and a list of LD matrices from
-multiple ancestries.</p>
+<p>The package comes with the necessary data included. To use MESuSiE,
+two lists are required: one for summary statistics and another for LD
+matrices, each from multiple ancestries. It’s essential to name each
+element in these lists, ensuring that the naming is consistent between
+the summary statistics and LD matrices.</p>
 <pre class="r"><code>data(summ_stat_list)
 data(LD_list)
 summ_stat_list</code></pre>
@@ -771,10 +807,11 @@ rs6600259 SNP3  0.0176200508 0.001825742  9.6508993 3e+05   3
 rs6681089 SNP4  0.0192921442 0.001825742 10.5667426 3e+05   4
 rs3008244 SNP5 -0.0017014483 0.001825742 -0.9319216 3e+05   5
 rs3008245 SNP6  0.0007568107 0.001825742  0.4145223 3e+05   6</code></pre>
-<p>Each element of the summary statistics list is a data frame of
-summary statistics from each ancestry with column name SNP, Beta, Se, Z,
-and N representing SNP information, marginal effect size, standard
-error, Z-scores and number of sample.</p>
+<p>Each element in the summary statistics list represents a data frame
+of GWAS summary statistics for each ancestry. This data frame should
+have columns named SNP, Beta, Se, Z, and N, which correspond to the SNP
+information, marginal effect size, standard error, Z-scores, and sample
+size, respectively.</p>
 <pre class="r"><code>LD_list</code></pre>
 <pre><code>$WB
                   SNP1         SNP2         SNP3         SNP4          SNP5
@@ -807,9 +844,16 @@ rs6600259  0.01240406
 rs6681089  0.01611964
 rs3008244  0.79215823
 rs3008245  1.00000000</code></pre>
-<p>Each element of the LD matrices list is a matrix of LD from each
-ancestry, with column name being SNP name matched up with the summary
-statistics.</p>
+<p>Each element in the LD matrices list corresponds to an LD matrix for
+a specific ancestry. The column names of this matrix should match the
+SNP names found in the summary statistics, ensuring consistency across
+data.</p>
+<blockquote>
+<p><strong>Note:</strong> For a detailed tutorial, please refer to <a
+href="https://borangao.github.io/meSuSie_Analysis/GWAS_QC.html">Data
+Preparation</a> and <a
+href="https://borangao.github.io/meSuSie_Analysis/Run_MESuSiE.html">analysis</a>.</p>
+</blockquote>
 </div>
 <div id="analysis" class="section level2">
 <h2>3. Analysis</h2>
@@ -895,9 +939,9 @@ susie_WB$pip</code></pre>
 <pre class="r"><code>susie_BB$pip</code></pre>
 <pre><code>        SNP1         SNP2         SNP3         SNP4         SNP5         SNP6 
 1.015177e-11 1.000000e+00 1.704749e-04 9.998295e-01 0.000000e+00 0.000000e+00 </code></pre>
-<p>After executing the univariate SuSiE analysis, we determined that SNP
-3 and 6 are signals specific to Europeans, while SNP 2 and 4 emerged as
-signals specific to Africans, using a PIP threshold of 0.5.</p>
+<p>For the univariate SuSiE analysis, we found that SNP 3 and 6 are
+signals distinct to Europeans. In contrast, SNP 2 and 4 are signals
+unique to Africans, based on a PIP threshold of 0.5.</p>
 </div>
 <div id="paintor" class="section level3">
 <h3>Paintor</h3>
@@ -905,13 +949,50 @@ signals specific to Africans, using a PIP threshold of 0.5.</p>
 paintor_res&lt;-read.table(&quot;/net/fantasia/home/borang/Susie_Mult/Revision_Round_1/Simulation/091223/data/toy_example/result/fig1.mcmc.paintor&quot;,header=T)
 paintor_res$Posterior_Prob</code></pre>
 <pre><code>[1] 0.040756 0.999980 0.987828 0.999956 0.993764 0.995080</code></pre>
-<p>Paintor identifies SNP2-5 as signals without distinguishing
+<p>Paintor identifies SNP2-6 as signals without distinguishing
 ancestry-specific or shared causal variant.</p>
 </div>
 </div>
 <div id="visualization" class="section level2">
 <h2>4. Visualization</h2>
-<p><img src="figure/installation.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/installation.Rmd/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/figure/installation.Rmd/unnamed-chunk-7-1.png" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

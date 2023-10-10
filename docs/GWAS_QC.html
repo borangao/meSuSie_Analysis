@@ -576,15 +576,15 @@ data/MESuSiE_Example.RData
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -594,7 +594,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -614,8 +614,6 @@ Untracked files:
     Untracked:  data/UKBB_chr_22.txt
 
 Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
     Deleted:    analysis/illustration.Rmd
     Deleted:    analysis/toy_example.Rmd
 
@@ -668,6 +666,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/ba8db567b85c23b12dd18456c89353b3fcfc63a2/analysis/GWAS_QC.Rmd" target="_blank">ba8db56</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Update my analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/GWAS_QC.html" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/GWAS_QC.Rmd" target="_blank">62ce4b3</a>
 </td>
 <td>
@@ -697,19 +729,25 @@ ancestries.</p>
 </blockquote>
 <div id="step-by-step-guideline" class="section level2">
 <h2>Step-by-Step Guideline</h2>
-<p>We used GWAS summary statistics of HDL on chromosome 22 from UKBB and
-GLGC for illustration purposes.</p>
+<p>For illustrative purposes, we utilized the GWAS summary statistics of
+HDL on chromosome 22 from the UK Biobank (UKBB) and the Global Lipids
+Genetics Consortium (GLGC). We offer a suite of functions for data
+preparation, which include
+<code>GWAS_QC</code>,<code>find_common_snps</code>,<code>allele_flip</code>.
+Additionally, we have adapted the <code>kriging_rss</code> function from
+SuSiE for enhanced functionality.</p>
 <div id="gwas-preparations" class="section level3">
 <h3>1. GWAS Preparations:</h3>
 <ul>
 <li><strong>Uniform QC:</strong> Apply a uniform QC process for each
 individual ancestry.</li>
 </ul>
-<p>We recommend filtering strand-ambiguous SNPs, multi-allelic SNPs,
-SNPs in MHC regions, and those with MAF &lt; 0.001. The
-<code>GWAS_QC</code> function requires summary data of CHR, POS,
-CHR_POS, REF, ALT, MAF, BETA, and SE. Users can specify a MAF threshold
-to pass into the function.</p>
+<p>We advise removing strand-ambiguous SNPs, multi-allelic SNPs, SNPs
+within MHC regions, and SNPs with a Minor Allele Frequency (MAF) less
+than 0.001. The <code>GWAS_QC</code> function requires summary data
+columns: CHR, POS, CHR_POS, REF, ALT, MAF, BETA, and SE. Additionally,
+users have the flexibility to define a specific MAF threshold when using
+the function.</p>
 <pre class="r"><code>library(MESuSiE)
 library(data.table)
 library(dplyr)
@@ -726,7 +764,7 @@ SNPs from various ancestries.</li>
 </ul>
 <p>Here we use <code>find_common_snps</code> to subset a common set of
 SNPs across ancestries. We matched up by CHR_POS and also check the
-reference and alternative allele are matched up together</p>
+reference and alternative allele are matched up together.</p>
 <pre class="r"><code>common_SNP &lt;- find_common_snps(UKBB, GLGC)
 UKBB_subset &lt;- UKBB %&gt;%
     filter(CHR_POS %in% common_SNP) %&gt;%
@@ -739,9 +777,10 @@ GLGC_subset &lt;- GLGC %&gt;%
 Identify variation in reference alleles across ancestries, and adjust
 the sign of the BETA and Z score.</li>
 </ul>
-<p>Here we use <code>allele_flip</code> to match up the GLGC reference
-allele with UKBB reference allele. The beta effect size is flipped if
-there is a reference allele difference.</p>
+<p>In this step, we employ the <code>allele_flip</code> function to
+align the reference alleles of the GLGC dataset with those of the UKBB
+dataset. If there are discrepancies in the reference alleles, the beta
+effect size is adjusted accordingly.</p>
 <pre class="r"><code>GLGC_subset_flip &lt;- allele_flip(UKBB_subset, GLGC_subset)</code></pre>
 </div>
 <div id="reference-panel-prepation" class="section level3">
@@ -846,12 +885,87 @@ LD discrepancies.</li>
 </ul>
 <pre class="r"><code>WB_diagnostic$plot</code></pre>
 <p><img src="figure/GWAS_QC.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/figure/GWAS_QC.Rmd/unnamed-chunk-8-1.png" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>BB_diagnostic$plot</code></pre>
 <p><img src="figure/GWAS_QC.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-2">
+Past versions of unnamed-chunk-8-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/figure/GWAS_QC.Rmd/unnamed-chunk-8-2.png" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>We see SNPs are more close to the line in UKBB and noisy in GLGC as
 we use in-sample LD for UKBB, and external LD for GLGC.</p>
-<div id="observations-recommendations" class="section level4">
-<h4>Observations &amp; Recommendations:</h4>
+</div>
+<div id="observations-recommendations" class="section level3">
+<h3>4. Observations &amp; Recommendations:</h3>
 <ul>
 <li><p><strong>LD Mismatch Indicators:</strong> SNPs that deviate most
 from the diagonal in the plots above suggest mismatches. It’s
@@ -896,9 +1010,8 @@ href="https://doi.org/10.5281/zenodo.5516202">DENTIST</a> (Chen et al.,
 NC 2021).</p></li>
 </ul>
 </div>
-</div>
 <div id="proof-of-concept" class="section level3">
-<h3>4. Proof of concept:</h3>
+<h3>5. Proof of concept:</h3>
 <ul>
 <li><strong>Create mismatch GWAS data:</strong> Set one of the GWAS
 signal Z-score to 0.</li>
@@ -919,6 +1032,43 @@ UKBB_example_mismatch$Z[2] = 0</code></pre>
 <pre class="r"><code>WB_diagnostic_mismatch &lt;- kriging_rss(UKBB_example_mismatch$Z, WB_cov)
 WB_diagnostic_mismatch$plot</code></pre>
 <p><img src="figure/GWAS_QC.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/figure/GWAS_QC.Rmd/unnamed-chunk-10-1.png" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>WB_diagnostic_mismatch$conditional_dist[2, ]</code></pre>
 <pre><code>  z  condmean   condvar z_std_diff logLR
 2 0 -10.59557 0.1321804   29.14345     0</code></pre>

@@ -568,15 +568,15 @@ data/MESuSiE_Example.RData
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistree62ce4b3f045d8a95de6224cb4bca6e2890f28abctargetblank62ce4b3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -586,7 +586,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/62ce4b3f045d8a95de6224cb4bca6e2890f28abc" target="_blank">62ce4b3</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -606,8 +606,6 @@ Untracked files:
     Untracked:  data/UKBB_chr_22.txt
 
 Unstaged changes:
-    Modified:   analysis/_site.yml
-    Modified:   analysis/about.Rmd
     Deleted:    analysis/illustration.Rmd
     Deleted:    analysis/toy_example.Rmd
 
@@ -660,6 +658,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/ba8db567b85c23b12dd18456c89353b3fcfc63a2/analysis/Run_MESuSiE.Rmd" target="_blank">ba8db56</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Update my analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/Run_MESuSiE.html" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/borangao/meSuSie_Analysis/blob/62ce4b3f045d8a95de6224cb4bca6e2890f28abc/analysis/Run_MESuSiE.Rmd" target="_blank">62ce4b3</a>
 </td>
 <td>
@@ -686,7 +718,38 @@ Update my analysis
 <p>Use the example from Data preparation. We provide
 <code>organize data</code> and <code>organize_ld</code> function to do
 the sanity check and organize the summary statistics and LD into the
-MESuSiE input format</p>
+MESuSiE input format.</p>
+<div id="organize_gwas-function" class="section level3">
+<h3><code>organize_gwas</code> Function</h3>
+<p>The <code>organize_gwas</code> function harmonizes two input GWAS
+datasets. Specifically, it:</p>
+<ol style="list-style-type: decimal">
+<li>Normalizes column names for internal processing.</li>
+<li>Validates the presence of essential columns like SNP, Beta, Se, Z,
+and N and computes missing values as necessary.</li>
+<li>Identifies strand-ambiguous and multi-allelic SNPs.</li>
+<li>Ensures that SNPs match in both datasets, subsetting to the common
+set if needed.</li>
+<li>Checks the consistency of REF and ALT alleles across the datasets,
+adjusting signs and flipping alleles where necessary.</li>
+<li>Returns the organized datasets in a list format with user-specified
+names.</li>
+</ol>
+<p>This function ensures datasets from varied sources are compatible and
+ready for subsequent analysis with MESuSiE.</p>
+</div>
+<div id="organize_ld-function" class="section level3">
+<h3><code>organize_ld</code> Function</h3>
+<p>The <code>organize_ld</code> function ensures that two LD matrices
+are symmetric and compatible with provided GWAS datasets:</p>
+<ol style="list-style-type: decimal">
+<li>Adjusts the LD matrices to be symmetric if they aren’t already.</li>
+<li>Ensures there are no NA values within the LD matrices.</li>
+<li>Validates that the LD matrices have SNP names in their column names
+and are consistent with the GWAS data.</li>
+<li>Returns the organized LD matrices in a list format with names
+consistent with the GWAS datasets.</li>
+</ol>
 <pre class="r"><code>library(dplyr)
 library(MESuSiE)
 load(&quot;/net/fantasia/home/borang/Susie_Mult/meSuSie_Analysis/data/MESuSiE_Example.RData&quot;)
@@ -694,6 +757,7 @@ summ_stat_list&lt;-organize_gwas(UKBB_example%&gt;%rename(SNP = CHR_POS),GLGC_ex
 colnames(WB_cov)&lt;-UKBB_example$CHR_POS
 colnames(BB_cov)&lt;-GLGC_example$CHR_POS
 LD_list&lt;-organize_ld(WB_cov,BB_cov,summ_stat_list)</code></pre>
+</div>
 </div>
 <div id="run-mesusie" class="section level2">
 <h2>2. Run MESuSiE:</h2>
@@ -851,6 +915,43 @@ part? You can adjust without having to rerun the entire analysis.</p>
 <h2>4. MESuSiE Visulization:</h2>
 <pre class="r"><code>MESuSiE_Plot(MESuSiE_res,LD_list,summ_stat_list)</code></pre>
 <p><img src="figure/Run_MESuSiE.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/504f3a9e75d5b5a4b027e6b3eb4de077680210c8/docs/figure/Run_MESuSiE.Rmd/unnamed-chunk-5-1.png" target="_blank">504f3a9</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
