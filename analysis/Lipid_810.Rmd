@@ -8,7 +8,7 @@ editor_options:
 ---
 
 # 810 Regions of 4 lipid traits
-> **Note**: all the code and analysis reproduced here can be found in [Repository](https://zenodo.org/deposit/8411004#)
+> **Note**: all the code and analysis reproduced here can be found in [Repository](https://doi.org/10.5281/zenodo.8411004)
 
 This analysis is done by relaxing the P-value threshold when constructing candidate regions.
 

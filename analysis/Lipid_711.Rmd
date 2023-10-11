@@ -9,7 +9,7 @@ editor_options:
 
 ## 711 Regions of 4 lipid traits
 
-> **Note**: all the code and analysis reproduced here can be found in [Repository](https://zenodo.org/deposit/8411004#)
+> **Note**: all the code and analysis reproduced here can be found in [Repository](https://doi.org/10.5281/zenodo.8411004)
 
 ## 1. Feature of 95% credible set
 

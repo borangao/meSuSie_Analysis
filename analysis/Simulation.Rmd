@@ -9,6 +9,8 @@ editor_options:
 
 # Baseline Setting 50% Shared Causal SNP
 
+> **Note**: all the code and analysis reproduced here can be found in [Repository](https://doi.org/10.5281/zenodo.8411004)
+
 ## Feature of 95% credible set
 ```{r,message=FALSE,warning=FALSE}
 library(ggplot2)
