@@ -15,7 +15,7 @@
 
 <title>Data Preparation</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -37,8 +37,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -411,7 +411,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-10-09
+<strong>Last updated:</strong> 2024-01-15
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -429,7 +429,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -576,15 +576,15 @@ data/MESuSiE_Example.RData
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreea7405510738f7f4711fb915d43f4bb1998519691targetblanka740551a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/a7405510738f7f4711fb915d43f4bb1998519691" target="_blank">a740551</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreeba8db567b85c23b12dd18456c89353b3fcfc63a2targetblankba8db56a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomborangaomeSuSieAnalysistreea7405510738f7f4711fb915d43f4bb1998519691targetblanka740551a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -594,7 +594,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/borangao/meSuSie_Analysis/tree/ba8db567b85c23b12dd18456c89353b3fcfc63a2" target="_blank">ba8db56</a>.
+<a href="https://github.com/borangao/meSuSie_Analysis/tree/a7405510738f7f4711fb915d43f4bb1998519691" target="_blank">a740551</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -666,6 +666,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/borangao/meSuSie_Analysis/blob/a7405510738f7f4711fb915d43f4bb1998519691/analysis/GWAS_QC.Rmd" target="_blank">a740551</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2024-01-15
+</td>
+<td>
+Update GWAS QC
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/borangao/meSuSie_Analysis/428bdf044282b852602a3441b6bd45c13d6fdc1f/docs/GWAS_QC.html" target="_blank">428bdf0</a>
+</td>
+<td>
+borangao
+</td>
+<td>
+2023-10-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/borangao/meSuSie_Analysis/blob/ba8db567b85c23b12dd18456c89353b3fcfc63a2/analysis/GWAS_QC.Rmd" target="_blank">ba8db56</a>
 </td>
 <td>
@@ -730,9 +764,13 @@ ancestries.</p>
 <div id="step-by-step-guideline" class="section level2">
 <h2>Step-by-Step Guideline</h2>
 <p>For illustrative purposes, we utilized the GWAS summary statistics of
-HDL on chromosome 22 from the UK Biobank (UKBB) and the Global Lipids
-Genetics Consortium (GLGC). We offer a suite of functions for data
-preparation, which include
+HDL on chromosome 22 from the UK Biobank (UKBB; <a
+href="https://www.nealelab.is/uk-biobank"
+class="uri">https://www.nealelab.is/uk-biobank</a>) and the Global
+Lipids Genetics Consortium (GLGC; <a
+href="https://csg.sph.umich.edu/willer/public/glgc-lipids2021/results/ancestry_specific/"
+class="uri">https://csg.sph.umich.edu/willer/public/glgc-lipids2021/results/ancestry_specific/</a>).
+We offer a suite of functions for data preparation, which include
 <code>GWAS_QC</code>,<code>find_common_snps</code>,<code>allele_flip</code>.
 Additionally, we have adapted the <code>kriging_rss</code> function from
 SuSiE for enhanced functionality.</p>
@@ -760,7 +798,10 @@ UKBB &lt;- GWAS_QC(UKBB, 0.001)
 GLGC &lt;- GWAS_QC(GLGC, 0.001)</code></pre>
 <ul>
 <li><strong>Subset of SNPs:</strong> Start with a consistent subset of
-SNPs from various ancestries.</li>
+SNPs from various ancestries. We used UKBB European and African ancestry
+genotype data as reference panel in the analysis. For users who do not
+have access to UKBB data, you can use genotype data of 1,000 Genome
+Project.</li>
 </ul>
 <p>Here we use <code>find_common_snps</code> to subset a common set of
 SNPs across ancestries. We matched up by CHR_POS and also check the
@@ -1138,7 +1179,7 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.3.1 (2023-06-16)
+<pre><code>R version 4.3.2 (2023-10-31)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Ubuntu 20.04.6 LTS
 
@@ -1161,37 +1202,36 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] susieR_0.11.84    snpStats_1.46.0   Matrix_1.5-4.1    survival_3.3-1   
-[5] dplyr_1.1.2       data.table_1.14.8 MESuSiE_1.0       workflowr_1.7.0  
+[1] susieR_0.12.35    snpStats_1.46.0   Matrix_1.6-2      survival_3.5-7   
+[5] dplyr_1.1.3       data.table_1.14.8 MESuSiE_1.0       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.1             xfun_0.39                bslib_0.5.0             
- [4] ggplot2_3.4.2            processx_3.8.0           ggrepel_0.9.1           
- [7] lattice_0.20-45          callr_3.7.3              vctrs_0.6.2             
-[10] tools_4.3.1              ps_1.7.2                 generics_0.1.3          
-[13] parallel_4.3.1           tibble_3.2.1             fansi_1.0.5             
-[16] highr_0.10               pkgconfig_2.0.3          lifecycle_1.0.3         
-[19] farver_2.1.1             compiler_4.3.1           stringr_1.5.0           
+ [1] gtable_0.3.4             xfun_0.41                bslib_0.5.1             
+ [4] ggplot2_3.4.4            processx_3.8.2           ggrepel_0.9.4           
+ [7] lattice_0.22-5           callr_3.7.3              vctrs_0.6.4             
+[10] tools_4.3.2              ps_1.7.5                 generics_0.1.3          
+[13] parallel_4.3.2           tibble_3.2.1             fansi_1.0.5             
+[16] highr_0.10               pkgconfig_2.0.3          lifecycle_1.0.4         
+[19] farver_2.1.1             compiler_4.3.2           stringr_1.5.0           
 [22] git2r_0.32.0             progress_1.2.2           munsell_0.5.0           
-[25] getPass_0.2-2            httpuv_1.6.11            htmltools_0.5.5         
-[28] sass_0.4.6               yaml_2.3.7               later_1.3.1             
+[25] getPass_0.2-2            httpuv_1.6.12            htmltools_0.5.7         
+[28] sass_0.4.7               yaml_2.3.7               later_1.3.1             
 [31] pillar_1.9.0             nloptr_2.0.3             crayon_1.5.2            
 [34] jquerylib_0.1.4          whisker_0.4.1            tidyr_1.3.0             
-[37] ellipsis_0.3.2           cachem_1.0.8             tidyselect_1.2.0        
-[40] digest_0.6.30            stringi_1.7.12           purrr_1.0.1             
-[43] labeling_0.4.2           splines_4.3.1            RcppArmadillo_0.11.1.1.0
-[46] cowplot_1.1.1            rprojroot_2.0.3          fastmap_1.1.1           
-[49] grid_4.3.1               colorspace_2.1-0         cli_3.6.1               
-[52] magrittr_2.0.3           Rfast_2.0.6              utf8_1.2.3              
-[55] withr_2.5.1              prettyunits_1.2.0        scales_1.2.1            
-[58] promises_1.2.0.1         RcppZiggurat_0.1.6       rmarkdown_2.22          
-[61] httr_1.4.6               matrixStats_1.0.0        hms_1.1.2               
-[64] evaluate_0.18            knitr_1.39               irlba_2.3.5.1           
-[67] rlang_1.1.1              Rcpp_1.0.11              mixsqp_0.3-48           
-[70] glue_1.6.2               formatR_1.14             BiocGenerics_0.46.0     
-[73] reshape_0.8.9            rstudioapi_0.14          jsonlite_1.8.3          
-[76] plyr_1.8.8               R6_2.5.1                 zlibbioc_1.46.0         
-[79] fs_1.6.2                </code></pre>
+[37] cachem_1.0.8             tidyselect_1.2.0         digest_0.6.33           
+[40] stringi_1.8.1            purrr_1.0.2              labeling_0.4.3          
+[43] RcppArmadillo_0.11.1.1.0 splines_4.3.2            cowplot_1.1.1           
+[46] rprojroot_2.0.4          fastmap_1.1.1            grid_4.3.2              
+[49] colorspace_2.1-0         cli_3.6.1                magrittr_2.0.3          
+[52] Rfast_2.0.6              utf8_1.2.4               withr_2.5.2             
+[55] prettyunits_1.2.0        scales_1.2.1             promises_1.2.1          
+[58] RcppZiggurat_0.1.6       rmarkdown_2.25           httr_1.4.7              
+[61] matrixStats_1.1.0        hms_1.1.3                evaluate_0.23           
+[64] knitr_1.45               irlba_2.3.5.1            rlang_1.1.2             
+[67] Rcpp_1.0.11              mixsqp_0.3-48            glue_1.6.2              
+[70] formatR_1.14             BiocGenerics_0.48.1      reshape_0.8.9           
+[73] rstudioapi_0.15.0        jsonlite_1.8.7           plyr_1.8.9              
+[76] R6_2.5.1                 zlibbioc_1.48.0          fs_1.6.2                </code></pre>
 </div>
 </div>
 </div>
