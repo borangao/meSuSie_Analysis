@@ -13,7 +13,7 @@ editor_options:
 
 ## Step-by-Step Guideline
 
-For illustrative purposes, we utilized the GWAS summary statistics of HDL on chromosome 22 from the UK Biobank (UKBB) and the Global Lipids Genetics Consortium (GLGC). We offer a suite of functions for data preparation, which include `GWAS_QC`,`find_common_snps`,`allele_flip`. Additionally, we have adapted the `kriging_rss` function from SuSiE for enhanced functionality.
+For illustrative purposes, we utilized the GWAS summary statistics of HDL on chromosome 22 from the UK Biobank (UKBB; https://www.nealelab.is/uk-biobank) and the Global Lipids Genetics Consortium (GLGC; https://csg.sph.umich.edu/willer/public/glgc-lipids2021/results/ancestry_specific/). We offer a suite of functions for data preparation, which include `GWAS_QC`,`find_common_snps`,`allele_flip`. Additionally, we have adapted the `kriging_rss` function from SuSiE for enhanced functionality.
 
 ### 1. GWAS Preparations:
 
@@ -36,6 +36,7 @@ We advise removing strand-ambiguous SNPs, multi-allelic SNPs, SNPs within MHC re
 ```
 
 -   **Subset of SNPs:** Start with a consistent subset of SNPs from various ancestries.
+We used UKBB European and African ancestry genotype data as reference panel in the analysis. For users who do not have access to UKBB data, you can use genotype data of 1,000 Genome Project. 
 
 Here we use `find_common_snps` to subset a common set of SNPs across ancestries. We matched up by CHR_POS and also check the reference and alternative allele are matched up together.
 
